@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# F1 landing page
 
-## Getting Started
+A Next.js landing page with scroll animations and an on-page cart, backed by your WooCommerce store.
 
-First, run the development server:
+- **Animations:** GSAP ScrollTrigger (pinned hero, horizontal scroll, product reveals), Lenis smooth scrolling, Motion for the cart drawer. Respects reduced-motion.
+- **Products:** read from the WooCommerce Store API at build time, refreshed every 15 minutes. Demo products show until `WOO_URL` is set.
+- **Cart:** slide-out drawer. The browser talks to `/api/cart/*` on this site, which forwards to the Store API and keeps the cart token in an httpOnly cookie.
+- **Checkout:** `/checkout` sends the shopper to WooCommerce's own checkout, carrying the cart over.
+
+## Run it
 
 ```bash
+cp .env.example .env.local   # set WOO_URL to your WordPress site
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## WordPress side
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `wordpress/f1-cart-handoff.php` to `wp-content/mu-plugins/` on your WordPress site. It loads the landing page's cart into WooCommerce before showing checkout. Test this step on a staging site first.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Push to GitHub and import the repo in Vercel. Add `WOO_URL` as an environment variable.
