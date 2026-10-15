@@ -9,11 +9,11 @@ export function CartButton() {
   return (
     <button
       onClick={() => setOpen(true)}
-      className="relative rounded-full border border-white/20 px-5 py-2 text-sm font-medium uppercase tracking-widest transition hover:border-red-500 hover:text-red-500"
+      className="relative rounded-full border border-white/20 px-5 py-2 text-sm font-medium uppercase tracking-widest transition hover:border-lime hover:text-lime"
     >
       Cart
       {cart.itemCount > 0 && (
-        <span className="absolute -right-2 -top-2 grid h-6 w-6 place-items-center rounded-full bg-red-600 text-xs text-white">
+        <span className="absolute -right-2 -top-2 grid h-6 w-6 place-items-center rounded-full bg-lime text-xs font-bold text-ink">
           {cart.itemCount}
         </span>
       )}
@@ -44,7 +44,7 @@ export function CartDrawer() {
           <motion.aside
             role="dialog"
             aria-label="Shopping cart"
-            className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-neutral-950 text-white shadow-2xl"
+            className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-ink text-white shadow-2xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -93,7 +93,7 @@ export function CartDrawer() {
               <a
                 href="/checkout"
                 aria-disabled={cart.items.length === 0}
-                className={`block rounded-full bg-red-600 py-4 text-center font-semibold uppercase tracking-widest transition hover:bg-red-500 ${cart.items.length === 0 ? "pointer-events-none opacity-40" : ""}`}
+                className={`block rounded-full bg-lime py-4 text-center font-semibold text-ink uppercase tracking-widest transition hover:brightness-110 ${cart.items.length === 0 ? "pointer-events-none opacity-40" : ""}`}
               >
                 Checkout
               </a>

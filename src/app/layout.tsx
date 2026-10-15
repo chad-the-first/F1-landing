@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Anton, Geist } from "next/font/google";
 import { CartProvider } from "@/components/CartProvider";
 import { CartDrawer } from "@/components/CartDrawer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const anton = Anton({ variable: "--font-anton", weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "F1 Store",
-  description: "Official merchandise, built for speed.",
+  title: "F1 Collectibles | Driver figures and desk displays",
+  description: "Hand-finished F1 driver figures and race car desk displays.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} antialiased`}>
-      <body className="bg-neutral-950 font-sans">
+    <html lang="en" className={`${geistSans.variable} ${anton.variable} antialiased`}>
+      <body className="bg-ink font-sans text-white">
         <CartProvider>
           <SmoothScroll />
           {children}

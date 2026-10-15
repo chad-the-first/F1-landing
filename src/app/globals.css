@@ -2,7 +2,22 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-anton);
+  --color-ink: #141313;
+  --color-lime: #d9f43a;
+  --color-studio: #e9eaee;
 }
 
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--stroke, rgba(255, 255, 255, 0.35));
+}
+
+/* Without motion, the pinned horizontal driver section becomes a plain vertical stack. */
+@media (prefers-reduced-motion: reduce) {
+  .h-section { height: auto; }
+  .h-track { flex-direction: column; width: auto; }
+}

@@ -3,7 +3,8 @@
 A Next.js landing page with scroll animations and an on-page cart, backed by your WooCommerce store.
 
 - **Animations:** GSAP ScrollTrigger (pinned hero, horizontal scroll, product reveals), Lenis smooth scrolling, Motion for the cart drawer. Respects reduced-motion.
-- **Products:** read from the WooCommerce Store API at build time, refreshed every 15 minutes. Demo products show until `WOO_URL` is set.
+- **Products:** read from the WooCommerce Store API, refreshed every 15 minutes. Until `WOO_URL` is set, demo products and a demo cart are used so the page can be tried end to end.
+- **Featured items:** the hero, driver series and MCL-40 sections are set up in `src/lib/showcase.ts`. Each item's `slug` must match the product's slug in WooCommerce so its Add to cart button uses the real product and price.
 - **Cart:** slide-out drawer. The browser talks to `/api/cart/*` on this site, which forwards to the Store API and keeps the cart token in an httpOnly cookie.
 - **Checkout:** `/checkout` sends the shopper to WooCommerce's own checkout, carrying the cart over.
 
