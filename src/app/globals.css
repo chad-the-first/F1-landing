@@ -26,7 +26,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 /* ---- Driver figures (FigureStack) ----
-   The frame is the 900x1652 figure image. Name tag: x 19%-85%, y 85%-96.5%. */
+   The frame is the 900x1652 figure image. Name tag: x 19%-85%, y 85%-96.5% (bottom corners 171,1594 and 765,1594). */
 .fs { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; touch-action: manipulation; cursor: pointer; outline: none; }
 .fs:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 16px; }
 .fs img { pointer-events: none; }
@@ -45,7 +45,7 @@ html.lenis, html.lenis body { height: auto; }
 .fs[data-on] .helmet-float { animation: none; }
 
 /* Every light starts off and switches off quickly; switching on waits for the helmet to land. */
-.fs-visor, .fs-visor-spill, .fs-backglow, .fs-uplight, .fs-taglight, .fs-flare {
+.fs-visor, .fs-visor-spill, .fs-backglow, .fs-uplight, .fs-beams, .fs-flare {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
@@ -84,17 +84,10 @@ html.lenis, html.lenis body { height: auto; }
 }
 .fs[data-on] .fs-uplight { opacity: 0.85; transition: opacity 0.9s 0.75s; }
 
-/* Cold white light raking across the name tag from its bottom-left and bottom-right corners. */
-.fs-taglight {
-  -webkit-mask: var(--body-mask) center / 100% 100% no-repeat;
-  mask: var(--body-mask) center / 100% 100% no-repeat;
-  background:
-    radial-gradient(ellipse 30% 9% at 19% 96.5%, rgba(225, 238, 255, 0.95), transparent 75%),
-    radial-gradient(ellipse 30% 9% at 85% 96.5%, rgba(225, 238, 255, 0.95), transparent 75%);
-  mix-blend-mode: screen;
-}
-.fs[data-on] .fs-taglight { opacity: 1; transition: opacity 0.5s 0.65s; }
-.fs-flare { background: radial-gradient(circle 2.2% at var(--fx) 96.5%, #fff, rgba(205, 225, 255, 0.6) 40%, transparent 100%); mix-blend-mode: screen; }
+/* Cold white beams from the name tag's bottom corners, angled at 45° to cross in an X (TagBeams). */
+.fs-beams { mix-blend-mode: screen; overflow: visible; }
+.fs[data-on] .fs-beams { opacity: 1; transition: opacity 0.5s 0.65s; }
+.fs-flare { background: radial-gradient(circle 1.6% at var(--fx) 96.5%, #fff, rgba(205, 225, 255, 0.6) 40%, transparent 100%); mix-blend-mode: screen; }
 .fs-flare-l { --fx: 19%; }
 .fs-flare-r { --fx: 85%; }
 .fs[data-on] .fs-flare { opacity: 1; transition: opacity 0.3s 0.6s; }
