@@ -25,6 +25,16 @@ html { transition: --accent 0.8s ease, --accent-2 0.8s ease, --accent-ink 0.8s e
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
+/* Idle bob for the floating helmets on the driver figures. */
+@keyframes helmet-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.2%); }
+}
+.helmet-float { animation: helmet-float 3.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .helmet-float { animation: none; }
+}
+
 .text-outline {
   color: transparent;
   -webkit-text-stroke: 1.5px var(--stroke, rgba(255, 255, 255, 0.35));

@@ -10,6 +10,7 @@ import { car, drivers } from "@/lib/showcase";
 import { AddToCart } from "./AddToCart";
 import { CartButton } from "./CartDrawer";
 import { Hero } from "./Hero";
+import { FigureStack } from "./FigureStack";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -128,8 +129,12 @@ export function Landing({ products }: { products: Product[] }) {
               >
                 {d.surname}
               </span>
-              <div className="figure relative aspect-[3/4] h-[48svh] shrink-0 overflow-hidden rounded-3xl shadow-2xl md:h-[72svh]" style={{ boxShadow: `0 40px 120px -30px ${d.accent}88` }}>
-                <Image src={d.image} alt={`${d.name} figure on a carbon-weave base`} fill sizes="(max-width: 768px) 70vw, 40vw" className="object-cover" />
+              <div className="figure relative shrink-0">
+                <div
+                  className="pointer-events-none absolute inset-x-[10%] bottom-[2%] h-[12%] rounded-[50%] blur-2xl"
+                  style={{ backgroundColor: `${d.accent}66` }}
+                />
+                <FigureStack item={d} sizes="(max-width: 768px) 60vw, 30vw" className="h-[50svh] md:h-[78svh]" />
               </div>
               <div className="relative max-w-md text-center md:text-left">
                 <p className="text-xs uppercase tracking-[0.35em]" style={{ color: d.accent }}>{d.team} · 2026 FW</p>
@@ -179,11 +184,23 @@ export function Landing({ products }: { products: Product[] }) {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((p) => (
             <article key={p.id} className="grid-card group flex flex-col overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10">
-              <div className="relative aspect-[3/4] overflow-hidden bg-neutral-800">
-                {p.image && (
-                  <div className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105" style={{ backgroundImage: `url(${p.image})` }} />
-                )}
-              </div>
+              {(() => {
+                const driver = drivers.find((d) => d.slug === p.slug);
+                return driver ? (
+                  <div
+                    className="relative flex aspect-[3/4] items-end justify-center overflow-hidden pt-6"
+                    style={{ background: `radial-gradient(ellipse at 50% 70%, ${driver.accent}38, transparent 70%)` }}
+                  >
+                    <FigureStack item={driver} sizes="(max-width: 640px) 80vw, 25vw" className="h-full" />
+                  </div>
+                ) : (
+                  <div className="relative aspect-[3/4] overflow-hidden bg-neutral-800">
+                    {p.image && (
+                      <div className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105" style={{ backgroundImage: `url(${p.image})` }} />
+                    )}
+                  </div>
+                );
+              })()}
               <div className="flex flex-1 flex-col p-5">
                 <div className="flex items-baseline justify-between gap-3">
                   <h3 className="font-semibold">{p.name}</h3>
