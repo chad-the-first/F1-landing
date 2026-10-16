@@ -193,11 +193,11 @@ html.lenis, html.lenis body { height: auto; }
 .pd-chip[aria-checked="true"] { opacity: 1; background: color-mix(in srgb, var(--beam) 22%, transparent); box-shadow: inset 0 0 0 2px var(--beam), 0 0 18px color-mix(in srgb, var(--beam) 45%, transparent); }
 
 /* Podium lights, switched on by hovering or tapping the podium (like the figures). The frame is
-   the 2238x462 podium image; its two ends are at (16, 345) and (2227, 350). */
+   the 2238x462 podium image. */
 .pd-podium { cursor: pointer; outline: none; -webkit-touch-callout: none; touch-action: manipulation; }
 .pd-podium:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 12px; }
 .pd-podium img { pointer-events: none; }
-.pd-tag, .pd-side, .pd-edge { position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.25s ease; }
+.pd-tag, .pd-side, .pd-strip { position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.25s ease; }
 
 .pd-tag-img { filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 10px rgba(205, 225, 255, 0.95)) drop-shadow(0 0 22px rgba(180, 210, 255, 0.6)); }
 .pd-tag-spill {
@@ -206,25 +206,28 @@ html.lenis, html.lenis body { height: auto; }
 }
 .pd-podium[data-on] .pd-tag { animation: visor-ignite 0.7s var(--d) both; }
 
-.pd-side { --y: 255, 212, 0; top: -160%; bottom: -70%; width: 34%; mix-blend-mode: screen; }
-.pd-side-l {
-  right: 99.3%;
-  background: conic-gradient(from 215deg at 100% 72%, rgba(var(--y), 0) 0deg, rgba(var(--y), 0.38) 30deg, rgba(var(--y), 0.95) 55deg, rgba(var(--y), 0.38) 80deg, rgba(var(--y), 0) 110deg, transparent 110deg);
-  -webkit-mask: radial-gradient(ellipse 100% 55% at 100% 72%, #000, rgba(0,0,0,.5) 35%, transparent); mask: radial-gradient(ellipse 100% 55% at 100% 72%, #000, rgba(0,0,0,.5) 35%, transparent);
+/* Each end face of the podium is a yellow light strip: the face itself glows, and a sheet of light
+   spreads out from its whole height. Face corners (podium image %), left: (0.67, 64.3) (4.33, 71.9)
+   (5.14, 93.1) (0.76, 86.6); right: (99.33, 68.2) (95.08, 75.8) (95.31, 92) (99.33, 86.6). */
+.pd-side { --y: 255, 212, 0; top: -160%; bottom: -70%; width: 34%; mix-blend-mode: screen; filter: blur(8px); }
+.pd-sheet { position: absolute; inset: 0; }
+.pd-side-l { right: 99.3%; }
+.pd-side-l .pd-sheet {
+  clip-path: polygon(100% 68%, 0% 36%, 0% 100%, 100% 74.7%);
+  background: linear-gradient(to left, rgba(var(--y), 0.95), rgba(var(--y), 0.4) 30%, rgba(var(--y), 0.1) 70%, transparent);
 }
-.pd-side-r {
-  left: 99.5%;
-  background: conic-gradient(from 35deg at 0% 72%, rgba(var(--y), 0) 0deg, rgba(var(--y), 0.38) 30deg, rgba(var(--y), 0.95) 55deg, rgba(var(--y), 0.38) 80deg, rgba(var(--y), 0) 110deg, transparent 110deg);
-  -webkit-mask: radial-gradient(ellipse 100% 55% at 0% 72%, #000, rgba(0,0,0,.5) 35%, transparent); mask: radial-gradient(ellipse 100% 55% at 0% 72%, #000, rgba(0,0,0,.5) 35%, transparent);
+.pd-side-r { left: 99.3%; }
+.pd-side-r .pd-sheet {
+  clip-path: polygon(0% 69.2%, 100% 37%, 100% 100%, 0% 74.7%);
+  background: linear-gradient(to right, rgba(var(--y), 0.95), rgba(var(--y), 0.4) 30%, rgba(var(--y), 0.1) 70%, transparent);
 }
-/* A hot strip of light on each end face, where the yellow comes out. */
-.pd-edge {
-  top: 58%; height: 34%; width: 3.2%; border-radius: 40%; mix-blend-mode: screen; filter: blur(3px);
-  background: radial-gradient(closest-side, #fff8d0, rgba(255, 212, 0, 0.9) 40%, rgba(255, 212, 0, 0) 100%);
-}
-.pd-edge-l { left: -1%; }
-.pd-edge-r { left: 98%; }
-.pd-podium[data-on] .pd-side, .pd-podium[data-on] .pd-edge { opacity: 1; transition: opacity 0.6s 0.25s; }
+.pd-strip { inset: 0; }
+.pd-strip-l { --face: polygon(0.67% 64.3%, 4.33% 71.9%, 5.14% 93.1%, 0.76% 86.6%); --dir: to right; }
+.pd-strip-r { --face: polygon(99.33% 68.2%, 95.08% 75.8%, 95.31% 92%, 99.33% 86.6%); --dir: to left; }
+.pd-strip-halo { position: absolute; inset: 0; filter: blur(9px); }
+.pd-strip-halo > div { position: absolute; inset: 0; clip-path: var(--face); background: #ffd400; }
+.pd-strip-led { position: absolute; inset: 0; clip-path: var(--face); background: linear-gradient(var(--dir), #fffbe0, #ffe24a 3%, #ffd400 5%, #e0a500 6%); }
+.pd-podium[data-on] .pd-side, .pd-podium[data-on] .pd-strip { opacity: 1; transition: opacity 0.6s 0.25s; }
 
 @media (prefers-reduced-motion: reduce) {
   .pd-podium[data-on] .pd-tag { animation: none; opacity: 1; }

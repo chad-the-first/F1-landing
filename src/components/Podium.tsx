@@ -368,8 +368,12 @@ export function Podium({ products }: { products: Product[] }) {
                   }}
                 >
                   {/* Yellow light pouring out of both ends of the podium. */}
-                  <div className="pd-side pd-side-l" aria-hidden />
-                  <div className="pd-side pd-side-r" aria-hidden />
+                  <div className="pd-side pd-side-l" aria-hidden>
+                    <div className="pd-sheet" />
+                  </div>
+                  <div className="pd-side pd-side-r" aria-hidden>
+                    <div className="pd-sheet" />
+                  </div>
                   <div className="absolute inset-0 overflow-hidden">
                   <Image src={podiumP2} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" draggable={false} className="pd-step-2 object-contain" />
                   <Image src={podiumP3} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" draggable={false} className="pd-step-3 object-contain" />
@@ -382,8 +386,14 @@ export function Podium({ products }: { products: Product[] }) {
                     className="pd-step-1 object-contain"
                   />
                   </div>
-                  <div className="pd-edge pd-edge-l" aria-hidden />
-                  <div className="pd-edge pd-edge-r" aria-hidden />
+                  {["pd-strip-l", "pd-strip-r"].map((side) => (
+                    <div key={side} className={`pd-strip ${side}`} aria-hidden>
+                      <div className="pd-strip-halo">
+                        <div />
+                      </div>
+                      <div className="pd-strip-led" />
+                    </div>
+                  ))}
                   {/* The 1, 2, 3 tags and the F1 plaque light up cold white. */}
                   {TAGS.map((t) => (
                     <div
