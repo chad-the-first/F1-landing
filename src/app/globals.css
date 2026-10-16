@@ -18,7 +18,7 @@
 :root,
 [data-team="mclaren"] { --accent: #d9f43a; --accent-2: #ff8000; --accent-ink: #141313; }
 [data-team="ferrari"] { --accent: #ffd400; --accent-2: #e8002d; --accent-ink: #141313; }
-[data-team="redbull"] { --accent: #e4002b; --accent-2: #1e41ff; --accent-ink: #ffffff; }
+[data-team="redbull"] { --accent: #1f45d6; --accent-2: #e4002b; --accent-ink: #ffffff; }
 
 html { transition: --accent 0.8s ease, --accent-2 0.8s ease, --accent-ink 0.8s ease; }
 

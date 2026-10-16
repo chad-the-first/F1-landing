@@ -33,5 +33,5 @@ export const car = { slug: "mcl40-desk-display", name: "MCL-40 Desk Display", im
 export const teams: { id: TeamId; name: string; swatch: string; helmet: StaticImageData; alt: string }[] = [
   { id: "mclaren", name: "McLaren", swatch: "#ff8000", helmet: helmetMclaren, alt: "Neon yellow McLaren race helmet with black tiger-stripe livery" },
   { id: "ferrari", name: "Ferrari", swatch: "#e8002d", helmet: helmetFerrari, alt: "Yellow Ferrari race helmet with red pinstripes and stars" },
-  { id: "redbull", name: "Red Bull", swatch: "#1e41ff", helmet: helmetRedbull, alt: "White Red Bull race helmet with red and blue livery" },
+  { id: "redbull", name: "Red Bull", swatch: "#e4002b", helmet: helmetRedbull, alt: "White Red Bull race helmet with red and blue livery" },
 ];
