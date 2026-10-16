@@ -7,13 +7,26 @@ import type { ShowcaseItem } from "@/lib/showcase";
 // A driver figure built from two transparent layers. The helmet hovers above the body; it seats
 // on the neck while a mouse hovers, on tap (toggles), or while a finger presses and holds.
 // When it connects, the visor lights up and the name tag and body are lit (see .fs-* in globals.css).
-export function FigureStack({ item, sizes, className = "" }: { item: ShowcaseItem; sizes: string; className?: string }) {
+// Pass `on` to control the helmet from outside, and `interactive={false}` when a parent handles input.
+export function FigureStack({
+  item,
+  sizes,
+  className = "",
+  on: forcedOn,
+  interactive = true,
+}: {
+  item: ShowcaseItem;
+  sizes: string;
+  className?: string;
+  on?: boolean;
+  interactive?: boolean;
+}) {
   const [hovered, setHovered] = useState(false);
   const [toggled, setToggled] = useState(false);
   const [held, setHeld] = useState(false);
   const holdTimer = useRef<number | undefined>(undefined);
   const longPress = useRef(false);
-  const on = hovered || toggled || held;
+  const on = forcedOn ?? (hovered || toggled || held);
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType === "mouse") return;
@@ -37,11 +50,12 @@ export function FigureStack({ item, sizes, className = "" }: { item: ShowcaseIte
 
   return (
     <div
-      role="button"
-      tabIndex={0}
-      aria-pressed={toggled}
-      aria-label={`${item.name} figure: put the helmet on`}
+      role={interactive ? "button" : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      aria-pressed={interactive ? toggled : undefined}
+      aria-label={interactive ? `${item.name} figure: put the helmet on` : undefined}
       data-on={on || undefined}
+      data-static={interactive ? undefined : true}
       className={`fs relative aspect-[900/1652] ${className}`}
       style={
         {
@@ -52,14 +66,14 @@ export function FigureStack({ item, sizes, className = "" }: { item: ShowcaseIte
           "--body-mask": `url(${item.body.src})`,
         } as React.CSSProperties
       }
-      onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
-      onPointerLeave={(e) => e.pointerType === "mouse" && setHovered(false)}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerCancel}
+      onPointerEnter={(e) => interactive && e.pointerType === "mouse" && setHovered(true)}
+      onPointerLeave={(e) => interactive && e.pointerType === "mouse" && setHovered(false)}
+      onPointerDown={interactive ? onPointerDown : undefined}
+      onPointerUp={interactive ? onPointerUp : undefined}
+      onPointerCancel={interactive ? onPointerCancel : undefined}
       onContextMenu={(e) => e.preventDefault()}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if (interactive && (e.key === "Enter" || e.key === " ")) {
           e.preventDefault();
           setToggled((t) => !t);
         }

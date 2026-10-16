@@ -11,6 +11,8 @@ import { AddToCart } from "./AddToCart";
 import { CartButton } from "./CartDrawer";
 import { Hero } from "./Hero";
 import { FigureStack } from "./FigureStack";
+import { Podium } from "./Podium";
+import { PODIUM_SLUG } from "@/lib/bundle";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -150,6 +152,8 @@ export function Landing({ products }: { products: Product[] }) {
         </div>
       </section>
 
+      <Podium products={products} />
+
       {/* Car showcase */}
       <section className="car bg-studio px-5 py-28 text-ink md:px-12 md:py-40">
         <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-[1.1fr_1fr] md:gap-20">
@@ -192,6 +196,11 @@ export function Landing({ products }: { products: Product[] }) {
                     style={{ background: `radial-gradient(ellipse at 50% 70%, ${driver.accent}38, transparent 70%)` }}
                   >
                     <FigureStack item={driver} sizes="(max-width: 640px) 80vw, 25vw" className="h-full" />
+                  </div>
+                ) : p.slug === PODIUM_SLUG ? (
+                  <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_60%,color-mix(in_srgb,var(--accent-2)_25%,transparent),transparent_70%)] p-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.image} alt="" className="w-full transition duration-700 group-hover:scale-105" />
                   </div>
                 ) : (
                   <div className="relative aspect-[3/4] overflow-hidden bg-neutral-800">

@@ -10,6 +10,8 @@ type CartContextValue = {
   error: string | null;
   setOpen: (open: boolean) => void;
   addItem: (id: number, quantity?: number) => Promise<void>;
+  // Adds several products in one go (e.g. a bundle). Resolves true if every line was added.
+  addItems: (lines: { id: number; quantity: number }[], opts?: { open?: boolean }) => Promise<boolean>;
   updateItem: (key: string, quantity: number) => Promise<void>;
   removeItem: (key: string) => Promise<void>;
 };
@@ -33,13 +35,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const run = useCallback(async (path: string, body?: object) => {
+  const run = useCallback(async (path: string, ...bodies: object[]) => {
     setBusy(true);
     setError(null);
     try {
-      setCart(await call(path, body));
+      for (const body of bodies) setCart(await call(path, body));
+      return true;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
+      return false;
     } finally {
       setBusy(false);
     }
@@ -59,8 +63,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       await run("add-item", { id, quantity });
       setOpen(true);
     },
-    updateItem: (key, quantity) => run("update-item", { key, quantity }),
-    removeItem: (key) => run("remove-item", { key }),
+    addItems: async (lines, { open = true } = {}) => {
+      const ok = await run("add-item", ...lines);
+      if (open) setOpen(true);
+      return ok;
+    },
+    updateItem: async (key, quantity) => void (await run("update-item", { key, quantity })),
+    removeItem: async (key) => void (await run("remove-item", { key })),
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

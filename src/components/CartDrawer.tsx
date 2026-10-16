@@ -86,6 +86,12 @@ export function CartDrawer() {
             </div>
 
             <footer className="border-t border-white/10 p-6">
+              {cart.fees.map((f) => (
+                <div key={f.key} className="mb-2 flex justify-between text-sm text-accent">
+                  <span>{f.name}</span>
+                  <span>{f.total}</span>
+                </div>
+              ))}
               <div className="mb-4 flex justify-between text-lg">
                 <span>Total</span>
                 <span className="font-semibold">{cart.total || "—"}</span>
