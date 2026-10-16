@@ -197,7 +197,7 @@ html.lenis, html.lenis body { height: auto; }
 .pd-podium { cursor: pointer; outline: none; -webkit-touch-callout: none; touch-action: manipulation; }
 .pd-podium:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 12px; }
 .pd-podium img { pointer-events: none; }
-.pd-tag, .pd-side, .pd-strip { position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.25s ease; }
+.pd-tag, .pd-side { position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.25s ease; }
 
 .pd-tag-img { filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 10px rgba(205, 225, 255, 0.95)) drop-shadow(0 0 22px rgba(180, 210, 255, 0.6)); }
 .pd-tag-spill {
@@ -206,28 +206,23 @@ html.lenis, html.lenis body { height: auto; }
 }
 .pd-podium[data-on] .pd-tag { animation: visor-ignite 0.7s var(--d) both; }
 
-/* Each end face of the podium is a yellow light strip: the face itself glows, and a sheet of light
-   spreads out from its whole height. Face corners (podium image %), left: (0.67, 64.3) (4.33, 71.9)
-   (5.14, 93.1) (0.76, 86.6); right: (99.33, 68.2) (95.08, 75.8) (95.31, 92) (99.33, 86.6). */
-.pd-side { --y: 255, 212, 0; top: -160%; bottom: -70%; width: 34%; mix-blend-mode: screen; filter: blur(8px); }
+/* Yellow light strips on the podium's 90° left and right sides. Those faces point away from the
+   camera, so the strips stay hidden: each sheet of light starts behind the podium (it sits under the
+   steps) and only its spill past the silhouette shows. The left side runs from the front corner
+   (0.7%, 64-87%) back to (3.7%, 27-49%) in podium image %; the right side mirrors it. */
+.pd-side { --y: 255, 212, 0; top: -160%; bottom: -70%; width: 39%; mix-blend-mode: screen; filter: blur(9px); }
 .pd-sheet { position: absolute; inset: 0; }
-.pd-side-l { right: 99.3%; }
+.pd-side-l { right: 95%; }
 .pd-side-l .pd-sheet {
-  clip-path: polygon(100% 68%, 0% 36%, 0% 100%, 100% 74.7%);
-  background: linear-gradient(to left, rgba(var(--y), 0.95), rgba(var(--y), 0.4) 30%, rgba(var(--y), 0.1) 70%, transparent);
+  clip-path: polygon(100% 57%, 0% 22%, 0% 100%, 100% 76%);
+  background: linear-gradient(to left, rgba(var(--y), 1), rgba(var(--y), 0.8) 14%, rgba(var(--y), 0.32) 40%, rgba(var(--y), 0.08) 70%, transparent 92%);
 }
-.pd-side-r { left: 99.3%; }
+.pd-side-r { left: 95%; }
 .pd-side-r .pd-sheet {
-  clip-path: polygon(0% 69.2%, 100% 37%, 100% 100%, 0% 74.7%);
-  background: linear-gradient(to right, rgba(var(--y), 0.95), rgba(var(--y), 0.4) 30%, rgba(var(--y), 0.1) 70%, transparent);
+  clip-path: polygon(0% 57%, 100% 22%, 100% 100%, 0% 76%);
+  background: linear-gradient(to right, rgba(var(--y), 1), rgba(var(--y), 0.8) 14%, rgba(var(--y), 0.32) 40%, rgba(var(--y), 0.08) 70%, transparent 92%);
 }
-.pd-strip { inset: 0; }
-.pd-strip-l { --face: polygon(0.67% 64.3%, 4.33% 71.9%, 5.14% 93.1%, 0.76% 86.6%); --dir: to right; }
-.pd-strip-r { --face: polygon(99.33% 68.2%, 95.08% 75.8%, 95.31% 92%, 99.33% 86.6%); --dir: to left; }
-.pd-strip-halo { position: absolute; inset: 0; filter: blur(9px); }
-.pd-strip-halo > div { position: absolute; inset: 0; clip-path: var(--face); background: #ffd400; }
-.pd-strip-led { position: absolute; inset: 0; clip-path: var(--face); background: linear-gradient(var(--dir), #fffbe0, #ffe24a 3%, #ffd400 5%, #e0a500 6%); }
-.pd-podium[data-on] .pd-side, .pd-podium[data-on] .pd-strip { opacity: 1; transition: opacity 0.6s 0.25s; }
+.pd-podium[data-on] .pd-side { opacity: 1; transition: opacity 0.6s 0.25s; }
 
 @media (prefers-reduced-motion: reduce) {
   .pd-podium[data-on] .pd-tag { animation: none; opacity: 1; }

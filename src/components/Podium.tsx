@@ -367,7 +367,7 @@ export function Podium({ products }: { products: Product[] }) {
                     }
                   }}
                 >
-                  {/* Yellow light pouring out of both ends of the podium. */}
+                  {/* Yellow light from strips on the podium's hidden sides; the steps cover the source. */}
                   <div className="pd-side pd-side-l" aria-hidden>
                     <div className="pd-sheet" />
                   </div>
@@ -386,14 +386,6 @@ export function Podium({ products }: { products: Product[] }) {
                     className="pd-step-1 object-contain"
                   />
                   </div>
-                  {["pd-strip-l", "pd-strip-r"].map((side) => (
-                    <div key={side} className={`pd-strip ${side}`} aria-hidden>
-                      <div className="pd-strip-halo">
-                        <div />
-                      </div>
-                      <div className="pd-strip-led" />
-                    </div>
-                  ))}
                   {/* The 1, 2, 3 tags and the F1 plaque light up cold white. */}
                   {TAGS.map((t) => (
                     <div
