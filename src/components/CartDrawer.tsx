@@ -9,11 +9,11 @@ export function CartButton() {
   return (
     <button
       onClick={() => setOpen(true)}
-      className="relative rounded-full border border-white/20 px-5 py-2 text-sm font-medium uppercase tracking-widest transition hover:border-lime hover:text-lime"
+      className="relative rounded-full border border-white/20 px-5 py-2 text-sm font-medium uppercase tracking-widest transition hover:border-accent hover:text-accent"
     >
       Cart
       {cart.itemCount > 0 && (
-        <span className="absolute -right-2 -top-2 grid h-6 w-6 place-items-center rounded-full bg-lime text-xs font-bold text-ink">
+        <span className="absolute -right-2 -top-2 grid h-6 w-6 place-items-center rounded-full bg-accent text-xs font-bold text-accent-ink">
           {cart.itemCount}
         </span>
       )}
@@ -93,7 +93,7 @@ export function CartDrawer() {
               <a
                 href="/checkout"
                 aria-disabled={cart.items.length === 0}
-                className={`block rounded-full bg-lime py-4 text-center font-semibold text-ink uppercase tracking-widest transition hover:brightness-110 ${cart.items.length === 0 ? "pointer-events-none opacity-40" : ""}`}
+                className={`block rounded-full bg-accent py-4 text-center font-semibold text-accent-ink uppercase tracking-widest transition hover:brightness-110 ${cart.items.length === 0 ? "pointer-events-none opacity-40" : ""}`}
               >
                 Checkout
               </a>

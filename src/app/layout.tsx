@@ -3,6 +3,7 @@ import { Anton, Geist } from "next/font/google";
 import { CartProvider } from "@/components/CartProvider";
 import { CartDrawer } from "@/components/CartDrawer";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { DEFAULT_TEAM, restoreTeamScript } from "@/lib/team";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -15,7 +16,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${anton.variable} antialiased`}>
+    <html lang="en" data-team={DEFAULT_TEAM} className={`${geistSans.variable} ${anton.variable} antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: restoreTeamScript }} />
+      </head>
       <body className="bg-ink font-sans text-white">
         <CartProvider>
           <SmoothScroll />

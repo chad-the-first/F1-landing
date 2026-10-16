@@ -7,13 +7,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Product } from "@/lib/woo";
 import { car, drivers } from "@/lib/showcase";
-import helmet from "../../public/images/hero-helmet.webp";
 import { AddToCart } from "./AddToCart";
 import { CartButton } from "./CartDrawer";
+import { Hero } from "./Hero";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const LIME = "#d9f43a";
 const statement =
   "Your favourite drivers, cast in miniature. Every figure stands on a carbon-weave base traced with the circuit and lap time of a race to remember.";
 
@@ -94,30 +93,10 @@ export function Landing({ products }: { products: Product[] }) {
         <CartButton />
       </nav>
 
-      {/* Hero */}
-      <section className="hero relative h-[100svh] overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_55%,rgba(217,244,58,0.10),transparent_55%)]" />
-        <h1 className="pointer-events-none absolute inset-0 flex flex-col items-center justify-between py-[14svh] font-display uppercase leading-none tracking-tight md:py-[6svh]">
-          <span className="overflow-hidden"><span className="hero-word hero-l block text-[26vw] md:text-[15vw]">Lights</span></span>
-          <span className="overflow-hidden"><span className="hero-word hero-r block text-[26vw] text-lime md:text-[15vw]">Out</span></span>
-        </h1>
-        <div className="hero-helmet absolute inset-0 flex items-center justify-center">
-          <Image
-            src={helmet}
-            alt="Neon yellow race helmet with black tiger-stripe livery"
-            preload
-            sizes="(max-width: 768px) 170vw, 64vw"
-            className="h-auto w-[170vw] max-w-none mix-blend-lighten [mask-image:radial-gradient(ellipse_45%_50%_at_50%_50%,black_55%,transparent_100%)] md:w-[64vw]"
-          />
-        </div>
-        <div className="absolute inset-x-0 bottom-6 flex items-end justify-between px-5 text-xs uppercase tracking-[0.3em] text-white/60 md:px-12">
-          <span className="hero-fade">2026 driver series</span>
-          <span className="hero-fade">Scroll</span>
-        </div>
-      </section>
+      <Hero />
 
       {/* Marquee */}
-      <section className="marquee -rotate-2 overflow-hidden bg-lime py-4 text-ink" aria-hidden>
+      <section className="marquee -rotate-2 overflow-hidden bg-accent py-4 text-accent-ink transition-colors" aria-hidden>
         <div className="marquee-track whitespace-nowrap font-display text-5xl uppercase md:text-7xl">
           {"Lights out and away we go ✦ ".repeat(8)}
         </div>
@@ -207,10 +186,10 @@ export function Landing({ products }: { products: Product[] }) {
               <div className="flex flex-1 flex-col p-5">
                 <div className="flex items-baseline justify-between gap-3">
                   <h3 className="font-semibold">{p.name}</h3>
-                  <span className="shrink-0 text-lime">{p.price}</span>
+                  <span className="shrink-0 text-accent">{p.price}</span>
                 </div>
                 <p className="mt-2 flex-1 text-sm text-white/55">{p.shortDescription}</p>
-                <div className="mt-5"><AddToCart product={p} accent={LIME} dark /></div>
+                <div className="mt-5"><AddToCart product={p} accent="var(--accent)" ink="var(--accent-ink)" /></div>
               </div>
             </article>
           ))}

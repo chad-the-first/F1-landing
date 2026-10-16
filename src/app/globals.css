@@ -4,9 +4,23 @@
   --font-sans: var(--font-geist-sans);
   --font-display: var(--font-anton);
   --color-ink: #141313;
-  --color-lime: #d9f43a;
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-ink: var(--accent-ink);
   --color-studio: #e9eaee;
 }
+
+/* Team themes, picked in the hero. Registered so the colours fade smoothly when the team changes. */
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #d9f43a; }
+@property --accent-2 { syntax: "<color>"; inherits: true; initial-value: #ff8000; }
+@property --accent-ink { syntax: "<color>"; inherits: true; initial-value: #141313; }
+
+:root,
+[data-team="mclaren"] { --accent: #d9f43a; --accent-2: #ff8000; --accent-ink: #141313; }
+[data-team="ferrari"] { --accent: #ffd400; --accent-2: #e8002d; --accent-ink: #141313; }
+[data-team="redbull"] { --accent: #e4002b; --accent-2: #1e41ff; --accent-ink: #ffffff; }
+
+html { transition: --accent 0.8s ease, --accent-2 0.8s ease, --accent-ink 0.8s ease; }
 
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
