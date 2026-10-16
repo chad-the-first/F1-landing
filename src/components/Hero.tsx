@@ -7,7 +7,9 @@ import { teams } from "@/lib/showcase";
 import { setTeam, TeamId, useTeam } from "@/lib/team";
 
 // Scroll and intro animations for the hero live in Landing (GSAP); this component owns the
-// team picker and the helmet swap (Motion).
+// team picker and the helmet swap (Motion). The intro and the scroll animation target different
+// wrappers (.hero-word / .hero-helmet-intro / .hero-fade vs .hero-l, .hero-r / .hero-helmet / .hero-ui)
+// so neither can capture the other's half-finished values.
 export function Hero() {
   const teamId = useTeam();
   const index = teams.findIndex((t) => t.id === teamId);
@@ -36,12 +38,13 @@ export function Hero() {
         className="absolute inset-0"
         style={{ background: "radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 55%)" }}
       />
-      <h1 className="pointer-events-none absolute inset-0 flex flex-col items-center justify-between pt-[13svh] pb-[22svh] font-display uppercase leading-none tracking-tight md:pt-[6svh] md:pb-[13svh]">
-        <span className="overflow-hidden"><span className="hero-word hero-l block text-[26vw] md:text-[14vw]">Lights</span></span>
-        <span className="overflow-hidden"><span className="hero-word hero-r block text-[26vw] text-accent md:text-[14vw]">Out</span></span>
+      <h1 className="hero-title pointer-events-none absolute inset-0 flex flex-col items-center justify-between pt-[13svh] pb-[22svh] font-display uppercase leading-none tracking-tight md:pt-[6svh] md:pb-[13svh]">
+        <span className="hero-l overflow-hidden"><span className="hero-word block text-[26vw] md:text-[14vw]">Lights</span></span>
+        <span className="hero-r overflow-hidden"><span className="hero-word block text-[26vw] text-accent md:text-[14vw]">Out</span></span>
       </h1>
 
       <div className="hero-helmet absolute inset-0 flex items-center justify-center md:-translate-y-[3svh]">
+        <div className="hero-helmet-intro">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={team.id}
@@ -66,9 +69,11 @@ export function Hero() {
             />
           </motion.div>
         </AnimatePresence>
+        </div>
       </div>
 
-      <div className="hero-fade absolute inset-x-0 bottom-14 flex flex-col items-center gap-3 px-5 md:bottom-10">
+      <div className="hero-ui absolute inset-x-0 bottom-14 px-5 md:bottom-10">
+        <div className="hero-fade flex flex-col items-center gap-3">
         <span className="text-[11px] uppercase tracking-[0.35em] text-white/50">Pick your team</span>
         <div role="radiogroup" aria-label="Team" onKeyDown={onKeyDown} className="flex gap-1 rounded-full bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur">
           {teams.map((t) => {
@@ -93,9 +98,10 @@ export function Hero() {
             );
           })}
         </div>
+        </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-5 hidden items-end justify-between px-12 text-xs uppercase tracking-[0.3em] text-white/50 md:flex">
+      <div className="hero-ui absolute inset-x-0 bottom-5 hidden items-end justify-between px-12 text-xs uppercase tracking-[0.3em] text-white/50 md:flex">
         <span className="hero-fade">{team.name} · 2026 driver series</span>
         <span className="hero-fade">Scroll</span>
       </div>

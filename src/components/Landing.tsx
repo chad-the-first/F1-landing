@@ -27,18 +27,19 @@ export function Landing({ products }: { products: Product[] }) {
         // Hero intro: the helmet focuses in while the headline rises from behind a mask.
         gsap
           .timeline({ defaults: { ease: "power4.out" } })
-          .from(".hero-helmet", { opacity: 0, scale: 0.8, filter: "blur(16px)", duration: 1.6 })
+          .from(".hero-helmet-intro", { opacity: 0, scale: 0.8, filter: "blur(16px)", duration: 1.6 })
           .from(".hero-word", { yPercent: 110, duration: 1.1, stagger: 0.12 }, 0.2)
           .from(".hero-fade", { opacity: 0, y: 20, duration: 0.8, stagger: 0.1 }, 0.8);
 
-        // Hero exit: words split apart and the helmet rushes toward the camera.
+        // Hero exit: words split apart and the helmet rushes toward the camera. Explicit start
+        // values mean scrolling back up always returns the hero to its resting state.
         gsap
           .timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "+=100%", scrub: true, pin: true } })
-          .to(".hero-l", { xPercent: -60, ease: "none" }, 0)
-          .to(".hero-r", { xPercent: 60, ease: "none" }, 0)
-          .to(".hero-helmet", { scale: 1.9, ease: "power1.in" }, 0)
-          .to(".hero-fade", { opacity: 0, ease: "none", duration: 0.3 }, 0)
-          .to(".hero-helmet, .hero-word", { opacity: 0, ease: "none", duration: 0.35 }, 0.65);
+          .fromTo(".hero-l", { xPercent: 0 }, { xPercent: -60, ease: "none" }, 0)
+          .fromTo(".hero-r", { xPercent: 0 }, { xPercent: 60, ease: "none" }, 0)
+          .fromTo(".hero-helmet", { scale: 1 }, { scale: 1.9, ease: "power1.in" }, 0)
+          .fromTo(".hero-ui", { opacity: 1 }, { opacity: 0, ease: "none", duration: 0.3 }, 0)
+          .fromTo(".hero-helmet, .hero-title", { opacity: 1 }, { opacity: 0, ease: "none", duration: 0.35 }, 0.65);
 
         gsap.to(".marquee-track", {
           xPercent: -25,
