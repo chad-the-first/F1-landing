@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useLightSwitch } from "@/lib/useLightSwitch";
 import type { ShowcaseItem } from "@/lib/showcase";
 
 // A driver figure built from two transparent layers. The helmet hovers above the body; it seats
@@ -21,32 +21,8 @@ export function FigureStack({
   on?: boolean;
   interactive?: boolean;
 }) {
-  const [hovered, setHovered] = useState(false);
-  const [toggled, setToggled] = useState(false);
-  const [held, setHeld] = useState(false);
-  const holdTimer = useRef<number | undefined>(undefined);
-  const longPress = useRef(false);
-  const on = forcedOn ?? (hovered || toggled || held);
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    if (e.pointerType === "mouse") return;
-    longPress.current = false;
-    holdTimer.current = window.setTimeout(() => {
-      longPress.current = true;
-      setHeld(true);
-    }, 300);
-  };
-  const onPointerUp = (e: React.PointerEvent) => {
-    if (e.pointerType === "mouse") return;
-    window.clearTimeout(holdTimer.current);
-    if (longPress.current) setHeld(false);
-    else setToggled((t) => !t);
-  };
-  // Fires when the finger starts scrolling instead, so a scroll never toggles the helmet.
-  const onPointerCancel = () => {
-    window.clearTimeout(holdTimer.current);
-    setHeld(false);
-  };
+  const { on: switchedOn, toggled, setHovered, setToggled, onPointerDown, onPointerUp, onPointerCancel } = useLightSwitch();
+  const on = forcedOn ?? switchedOn;
 
   return (
     <div
