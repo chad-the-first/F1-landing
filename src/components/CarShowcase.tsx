@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -16,6 +16,13 @@ import wheelRL from "../../public/images/car/wheel-rl.webp";
 import wheelRR from "../../public/images/car/wheel-rr.webp";
 import wheelFL from "../../public/images/car/wheel-fl.webp";
 import wheelFR from "../../public/images/car/wheel-fr.webp";
+import sceneBase from "../../public/images/car/base/scene-base.webp";
+import sceneCar from "../../public/images/car/base/scene-car.webp";
+import sceneFront from "../../public/images/car/base/scene-front.webp";
+import helmetImg from "../../public/images/car/base/helmet.webp";
+import visorImg from "../../public/images/car/base/visor-lit.webp";
+import kerbLight from "../../public/images/car/base/kerb-light.webp";
+import buttonLight from "../../public/images/car/base/button-light.webp";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -49,14 +56,33 @@ const STREAKS = [
   [66, 0.25, 50], [72, 0.6, 24], [79, 0.05, 40], [86, 0.45, 28], [91, 0.8, 36],
 ] as const;
 
+// The car on its base, from the "car on base" photo (a 1720x1140 crop). It sits centred on the stage at
+// full height. The base on its own and the helmet are lined up to that photo; everything below is % of it.
+const SCENE = { w: 1720, h: 1140, width: 75.03 };
+const HELMET = { left: 34.767, top: 3.947, width: 24.477, height: 45.351 };
+// The halo's front bar and the car below it, layered over the helmet so it slides in behind them.
+const FRONT = { left: 29.07, top: 35.088, width: 37.209, height: 35.088 };
+const BUTTON = { left: 81.395, top: 57.018, width: 16.279, height: 24.561, cx: 89.36, cy: 69.035, r: 6.86 };
+// Where the three-quarter car (scaled about the stage centre) lines up with the car on the base.
+const LAND = { scale: 0.637, xPercent: -4.1, yPercent: -7.57 };
+// Timeline time at which the helmet is seated and the lights come on.
+const SEATED = 11.95;
+
 const CAPTIONS = [
   { k: "Lights out", t: "The papaya #1 car, in miniature.", d: "Halo, T-cam, front and rear wings, and the full papaya and black livery." },
   { k: "Magnetic wheels", t: "Pull a wheel. It comes right off.", d: "All four wheels are detachable and held on by magnets." },
   { k: "Click", t: "Bring it close and it snaps back.", d: "Line a wheel up with its hub and the magnet does the rest." },
+  { k: "The base", t: "Parked on carbon, between the kerbs.", d: "A carbon-weave display base with red and white kerbs and a start/stop engine button." },
+  { k: "Start engine", t: "Helmet in. Lights on.", d: "Press START ENGINE STOP on the base to switch the kerb lights and the visor on and off." },
 ];
 
 export function CarShowcase({ product }: { product?: Product }) {
   const root = useRef<HTMLElement>(null);
+  // The lights need the helmet seated (driven by the scroll) and the engine switched on (the button).
+  const [seated, setSeated] = useState(false);
+  const [power, setPower] = useState(true);
+  const [pressed, setPressed] = useState(false);
+  const lit = seated && power;
 
   useGSAP(
     () => {
@@ -66,7 +92,8 @@ export function CarShowcase({ product }: { product?: Product }) {
         const travelPx = (sideTravel / 100) * (SIDE.width / 100) * STAGE.w;
         const drive = { duration: 2.4, ease: "power3.out" };
 
-        gsap.set(".cs-exploded, .cs-mag, .cs-wire, .cs-cap-1, .cs-cap-2, .cs-final", { autoAlpha: 0 });
+        gsap.set(".cs-exploded, .cs-mag, .cs-wire, .cs-cap-1, .cs-cap-2, .cs-cap-3, .cs-cap-4, .cs-final", { autoAlpha: 0 });
+        gsap.set(".cs-base, .cs-scene-car, .cs-front, .cs-helmet", { autoAlpha: 0 });
         gsap.set(".cs-turn", { autoAlpha: 0 });
         WHEELS.forEach((w) =>
           gsap.set(`.cs-wheel-${w.id}`, { xPercent: (w.dx / w.width) * 100, yPercent: (w.dy / w.height) * 100, scale: w.scale }),
@@ -74,7 +101,8 @@ export function CarShowcase({ product }: { product?: Product }) {
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: root.current, start: "top top", end: "+=420%", scrub: 0.6, pin: true, anticipatePin: 1 },
+          scrollTrigger: { trigger: root.current, start: "top top", end: "+=560%", scrub: 0.6, pin: true, anticipatePin: 1 },
+          onUpdate: () => setSeated(tl.time() >= SEATED),
         });
 
         // 1. Drive in: the car brakes to a stop, wheels rolling, streaks and ghost trails fading.
@@ -126,11 +154,36 @@ export function CarShowcase({ product }: { product?: Product }) {
           .to(".cs-exploded", { autoAlpha: 0, duration: 0.15 }, 8.4)
           .fromTo(".cs-sweep-band", { xPercent: 0 }, { xPercent: 450, duration: 1.1, ease: "power1.inOut", immediateRender: false }, 8.5)
 
-          // 5. Settle on the car with the buy panel.
-          .to(".cs-cap-2", { autoAlpha: 0, y: -16, duration: 0.4 }, 9.0)
-          .fromTo(".cs-final", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.6 }, 9.2)
-          .to({}, { duration: 0.6 }, 9.8);
+          // 5. The camera pulls back as the base rises out of the floor; the car hovers over it, then drops on.
+          .to(".cs-cap-2", { autoAlpha: 0, y: -16, duration: 0.4 }, 8.9)
+          .to(".cs-turn", { scale: LAND.scale, xPercent: LAND.xPercent, yPercent: LAND.yPercent - 22, duration: 1.1, ease: "power2.inOut" }, 8.9)
+          .fromTo(".cs-base", { autoAlpha: 0, yPercent: 45 }, { autoAlpha: 1, yPercent: 0, duration: 1.0, ease: "power3.out" }, 9.0)
+          .to(".cs-turn", { yPercent: LAND.yPercent, duration: 0.45, ease: "power3.in" }, 10.0)
+          // Touchdown: a flash across the plate hides the swap to the photo of the car on its base.
+          .set(".cs-land", { scaleX: 0.3, autoAlpha: 1 }, 10.45)
+          .to(".cs-land", { scaleX: 1.6, autoAlpha: 0, duration: 0.6, ease: "power2.out" }, 10.45)
+          .to(".cs-shake", { y: 7, duration: 0.05, repeat: 3, yoyo: true }, 10.45)
+          .to(".cs-scene-car, .cs-front", { autoAlpha: 1, duration: 0.12 }, 10.45)
+          .to(".cs-turn", { autoAlpha: 0, duration: 0.12 }, 10.5)
+          .to(".cs-base", { autoAlpha: 0, duration: 0.01 }, 10.6)
+          .fromTo(".cs-cap-3", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 10.6)
+
+          // 6. The helmet drops in from above and slides down behind the halo into the cockpit.
+          .fromTo(".cs-helmet", { autoAlpha: 1, yPercent: -150, rotate: -10 }, { yPercent: 0, rotate: 0, duration: 1.0, ease: "power2.in", immediateRender: false }, 10.9)
+          .set(".cs-helmet", { autoAlpha: 0 }, 10.89)
+          .to(".cs-helmet", { yPercent: -4, duration: 0.1, ease: "power1.out" }, 11.9)
+          .to(".cs-helmet", { yPercent: 0, duration: 0.25, ease: "bounce.out" }, 12.0)
+          .to(".cs-shake", { y: 4, duration: 0.04, repeat: 3, yoyo: true }, 11.9)
+          .to(".cs-cap-3", { autoAlpha: 0, y: -16, duration: 0.4 }, 12.1)
+          .fromTo(".cs-cap-4", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 12.3)
+
+          // 7. Settle with the buy panel.
+          .to(".cs-cap-4", { autoAlpha: 0, y: -16, duration: 0.4 }, 13.2)
+          .fromTo(".cs-final", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.6 }, 13.4)
+          .to({}, { duration: 0.6 }, 14.0);
       });
+      // Without motion there is no story to scroll through: show the finished car with its lights on.
+      mm.add("(prefers-reduced-motion: reduce)", () => setSeated(true));
     },
     { scope: root },
   );
@@ -180,6 +233,49 @@ export function CarShowcase({ product }: { product?: Product }) {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* The car on its base: the base alone rises in, then the photo of the car on it takes over at
+              touchdown, and the helmet drops in between the car and the halo's front bar. */}
+          <div className="cs-scene absolute top-0 h-full" data-on={lit || undefined} style={{ left: `${(100 - SCENE.width) / 2}%`, width: `${SCENE.width}%` }}>
+            <Image src={sceneBase} alt="" fill sizes="(max-width: 768px) 84vw, 940px" className="cs-base object-contain" />
+            <Image
+              src={sceneCar}
+              alt="MCL-40 model car on a carbon-weave base with red and white kerbs and a start/stop engine button"
+              fill
+              sizes="(max-width: 768px) 84vw, 940px"
+              className="cs-scene-car object-contain"
+            />
+            <div className="cs-helmet absolute" style={box(HELMET)}>
+              <Image src={helmetImg} alt="" fill sizes="(max-width: 768px) 21vw, 240px" className="object-contain" />
+              <Image src={visorImg} alt="" fill sizes="(max-width: 768px) 21vw, 240px" className="cs-visor object-contain" />
+            </div>
+            <div className="cs-front absolute" style={box(FRONT)}>
+              <Image src={sceneFront} alt="" fill sizes="(max-width: 768px) 32vw, 360px" className="object-contain" />
+            </div>
+            {/* Over the front of the car too, so the light falling on it isn't cut off where the helmet layers sit. */}
+            <Image src={kerbLight} alt="" fill sizes="(max-width: 768px) 84vw, 940px" className="cs-kerb object-contain" />
+            <div className="cs-btn-light absolute" style={box(BUTTON)}>
+              <Image src={buttonLight} alt="" fill sizes="(max-width: 768px) 14vw, 160px" className="object-contain" />
+            </div>
+            <span className="cs-land" aria-hidden />
+            <button
+              type="button"
+              className="cs-start"
+              data-ready={seated || undefined}
+              disabled={!seated}
+              aria-pressed={power}
+              aria-label={`Start/stop engine button: turn the lights ${power ? "off" : "on"}`}
+              onClick={() => {
+                setPower((p) => !p);
+                setPressed(true);
+              }}
+              style={{ left: `${BUTTON.cx}%`, top: `${BUTTON.cy}%`, width: `${BUTTON.r * 2}%` }}
+            >
+              <span className="cs-start-tag" aria-hidden>
+                {pressed ? (power ? "Lights on" : "Lights off") : "Press start"}
+              </span>
+            </button>
           </div>
 
           {/* Three-quarter view: the assembled car, and the layered car whose wheels come off */}
@@ -238,7 +334,7 @@ export function CarShowcase({ product }: { product?: Product }) {
         ))}
         <div className="cs-final col-start-1 row-start-1 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <ul className="flex flex-wrap gap-2 text-xs uppercase tracking-widest text-white/80">
-            {["Magnetic detachable wheels", "Halo and T-cam", "Front and rear wings", "Papaya #1 livery"].map((f) => (
+            {["Magnetic detachable wheels", "Helmet in the cockpit", "Carbon-weave kerb base", "Start / stop engine button"].map((f) => (
               <li key={f} className="rounded-full border border-white/20 px-3 py-2">
                 {f}
               </li>
@@ -250,6 +346,13 @@ export function CarShowcase({ product }: { product?: Product }) {
     </section>
   );
 }
+
+const box = (b: { left: number; top: number; width: number; height: number }) => ({
+  left: `${b.left}%`,
+  top: `${b.top}%`,
+  width: `${b.width}%`,
+  height: `${b.height}%`,
+});
 
 function Wheel({ w }: { w: (typeof WHEELS)[number] }) {
   return (

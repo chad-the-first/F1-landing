@@ -332,10 +332,99 @@ html.lenis, html.lenis body { height: auto; }
   background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.08) 30%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0.08) 70%, transparent);
 }
 
-/* Without motion: no pin, just the finished car with its wheels-off caption and the buy panel. */
+/* Without motion: no pin, just the car on its base with the lights caption and the buy panel. */
 @media (prefers-reduced-motion: reduce) {
   .car-show { height: auto; min-height: 100svh; }
-  .cs-side, .cs-streaks, .cs-hub, .cs-cap-0, .cs-cap-2 { display: none; }
-  .cs-turn, .cs-cap-1, .cs-final { visibility: visible; opacity: 1; }
-  .cs-final { grid-row-start: 2; margin-top: 1.5rem; }
+  .cs-side, .cs-streaks, .cs-turn, .cs-cap-0, .cs-cap-1, .cs-cap-2, .cs-cap-3 { display: none; }
+  .cs-final { visibility: visible; opacity: 1; grid-row-start: 2; margin-top: 1.5rem; }
+}
+
+/* The car on its base. Its layers start hidden and the scroll story brings them in. */
+.cs-base, .cs-scene-car, .cs-front, .cs-helmet, .cs-cap-3, .cs-cap-4, .cs-land { visibility: hidden; opacity: 0; }
+.cs-scene { pointer-events: none; }
+.cs-land {
+  position: absolute;
+  left: 12%;
+  right: 22%;
+  top: 52%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 244, 225, 0.95), rgba(255, 128, 0, 0.55) 35%, transparent 70%);
+  mix-blend-mode: screen;
+}
+
+/* Lights, switched by the helmet seating and the start/stop button (data-on). The kerb strips run from
+   the back of the kerbs to the front, the visor flickers on like the figures', and the button lights up. */
+.cs-kerb, .cs-btn-light { opacity: 0; transition: opacity 0.25s; }
+.cs-scene[data-on] .cs-kerb { opacity: 1; animation: cs-strip 0.9s 0.35s both; }
+.cs-scene[data-on] .cs-btn-light { opacity: 1; animation: visor-ignite 0.6s both; }
+@keyframes cs-strip {
+  0% { clip-path: inset(0 100% 100% 0); opacity: 0.4; }
+  15% { opacity: 1; }
+  25% { opacity: 0.5; }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+.cs-visor { opacity: 0; filter: drop-shadow(0 0 5px rgba(255, 214, 150, 0.95)) drop-shadow(0 0 18px rgba(255, 140, 30, 0.75)); }
+.cs-scene[data-on] .cs-visor { animation: visor-ignite 0.7s 0.15s both; }
+
+/* The start/stop button: a round hit area over the photo's button, with a pulse and a tag inviting a press. */
+.cs-start {
+  position: absolute;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s 0.6s, visibility 0s 0.6s;
+}
+.cs-start[data-ready] { opacity: 1; visibility: visible; }
+.cs-start:focus-visible { outline: 2px solid #ff8000; outline-offset: 4px; }
+.cs-start:active { transform: translate(-50%, -50%) scale(0.94); }
+.cs-start::before, .cs-start::after {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 128, 0, 0.85);
+  animation: cs-press 1.8s ease-out infinite;
+}
+.cs-start::after { animation-delay: -0.9s; }
+@keyframes cs-press {
+  from { transform: scale(1); opacity: 0.9; }
+  to { transform: scale(1.7); opacity: 0; }
+}
+.cs-start-tag {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  border-radius: 999px;
+  background: #ff8000;
+  color: #141313;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 24px rgba(255, 128, 0, 0.35);
+  animation: cs-bob 1.6s ease-in-out infinite alternate;
+}
+.cs-start-tag::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border: 6px solid transparent;
+  border-top-color: #ff8000;
+  transform: translateX(-50%);
+}
+@keyframes cs-bob { to { translate: 0 -5px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-scene-car, .cs-front, .cs-helmet, .cs-cap-4 { visibility: visible; opacity: 1; }
+  .cs-scene[data-on] .cs-kerb, .cs-scene[data-on] .cs-btn-light, .cs-scene[data-on] .cs-visor { animation: none; opacity: 1; }
+  .cs-start::before, .cs-start::after, .cs-start-tag { animation: none; }
 }

@@ -214,17 +214,26 @@ export function Podium({ products }: { products: Product[] }) {
           );
         };
 
+        // The title rises in as soon as it scrolls into view, not with the stage further down, so the
+        // top of the section is never an empty screen on shorter displays.
+        gsap.from(".pd-title-word", {
+          yPercent: 110,
+          duration: 1,
+          stagger: 0.08,
+          ease: "power4.out",
+          scrollTrigger: { trigger: ".pd-title", start: "top 90%", once: true },
+        });
+
         gsap
           .timeline({
             scrollTrigger: {
               trigger: st,
-              start: "top 70%",
+              start: "top 85%",
               once: true,
             },
             defaults: { ease: "power4.out" },
           })
           .call(crownTeam)
-          .from(".pd-title-word", { yPercent: 110, duration: 1, stagger: 0.08 }, 0)
           // The steps rise out of the floor: the winner's step first, so it covers the seams.
           .from(".pd-step-1", { yPercent: 105, duration: 0.9 }, 0.1)
           .from(".pd-step-2", { yPercent: 105, duration: 0.9 }, 0.25)
@@ -301,7 +310,7 @@ export function Podium({ products }: { products: Product[] }) {
       <div className="relative mx-auto max-w-7xl">
         <header className="max-w-3xl">
           <p className="text-xs uppercase tracking-[0.35em] text-accent">The podium bundle</p>
-          <h2 id="podium-title" className="mt-4 font-display text-[16vw] uppercase leading-[0.88] md:text-[8.5vw] lg:text-[7.5rem]">
+          <h2 id="podium-title" className="pd-title mt-4 font-display text-[16vw] uppercase leading-[0.88] md:text-[8.5vw] lg:text-[7.5rem]">
             {["Build", "your", "podium"].map((w) => (
               <span key={w} className="inline-block overflow-hidden pr-[0.18em] align-bottom">
                 <span className="pd-title-word inline-block">{w}</span>
