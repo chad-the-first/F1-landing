@@ -19,6 +19,8 @@ import wheelFR from "../../public/images/car/wheel-fr.webp";
 import sceneBase from "../../public/images/car/base/scene-base.webp";
 import sceneCar from "../../public/images/car/base/scene-car.webp";
 import sceneFront from "../../public/images/car/base/scene-front.webp";
+import sceneFinal from "../../public/images/car/base/scene-final.webp";
+import carLand from "../../public/images/car/base/car-land.webp";
 import helmetImg from "../../public/images/car/base/helmet.webp";
 import visorImg from "../../public/images/car/base/visor-lit.webp";
 import kerbLight from "../../public/images/car/base/kerb-light.webp";
@@ -56,17 +58,25 @@ const STREAKS = [
   [66, 0.25, 50], [72, 0.6, 24], [79, 0.05, 40], [86, 0.45, 28], [91, 0.8, 36],
 ] as const;
 
-// The car on its base, from the "car on base" photo (a 1720x1140 crop). It sits centred on the stage at
-// full height. The base on its own and the helmet are lined up to that photo; everything below is % of it.
-const SCENE = { w: 1720, h: 1140, width: 75.03 };
-const HELMET = { left: 34.767, top: 3.947, width: 24.477, height: 45.351 };
+// The car on its base, framed on the "car on base with helmet" photo (a 1700x1100 crop), which is the
+// last frame. It sits centred on the stage at full height; every layer below is lined up to that photo
+// and placed in % of it:
+// - the base alone (same shot), which rises in first;
+// - the three-quarter car, perspective-warped onto the car on the base, for the drop;
+// - the car without its helmet (the no-helmet photo's cockpit, warped in), for the helmet drop;
+// - the helmet photo, fitted over the helmet in the final photo.
+const SCENE = { width: 76.855 };
+const HELMET = { left: 32.647, top: 6.182, width: 22.235, height: 42.182 };
 // The halo's front bar and the car below it, layered over the helmet so it slides in behind them.
-const FRONT = { left: 29.07, top: 35.088, width: 37.209, height: 35.088 };
-const BUTTON = { left: 81.395, top: 57.018, width: 16.279, height: 24.561, cx: 89.36, cy: 69.035, r: 6.86 };
-// Where the three-quarter car (scaled about the stage centre) lines up with the car on the base.
-const LAND = { scale: 0.637, xPercent: -4.1, yPercent: -7.57 };
+const FRONT = { left: 23.529, top: 36.545, width: 43.176, height: 32.091 };
+const VISOR = { left: 36.706, top: 26.273, width: 18.176, height: 8.091 };
+const BUTTON = { left: 80, top: 56.364, width: 16.471, height: 25.455, cx: 88.059, cy: 69.091, r: 6.941 };
+// The three-quarter car's pose (about the stage centre) closest to the warped car on the base.
+const LAND = { scale: 0.679, rotate: 4.99, xPercent: -4.09, yPercent: -6.22 };
+// How far above the base the car hovers before it drops, in % of the stage height.
+const HOVER = 22;
 // Timeline time at which the helmet is seated and the lights come on.
-const SEATED = 11.95;
+const SEATED = 12.05;
 
 const CAPTIONS = [
   { k: "Lights out", t: "The papaya #1 car, in miniature.", d: "Halo, T-cam, front and rear wings, and the full papaya and black livery." },
@@ -93,7 +103,9 @@ export function CarShowcase({ product }: { product?: Product }) {
         const drive = { duration: 2.4, ease: "power3.out" };
 
         gsap.set(".cs-exploded, .cs-mag, .cs-wire, .cs-cap-1, .cs-cap-2, .cs-cap-3, .cs-cap-4, .cs-final", { autoAlpha: 0 });
-        gsap.set(".cs-base, .cs-scene-car, .cs-front, .cs-helmet", { autoAlpha: 0 });
+        gsap.set(".cs-base, .cs-car-land, .cs-scene-car, .cs-front, .cs-final-photo", { autoAlpha: 0 });
+        // The helmet never fades: it waits out of sight above the screen until it drops.
+        gsap.set(".cs-helmet", { autoAlpha: 1, y: () => -window.innerHeight });
         gsap.set(".cs-turn", { autoAlpha: 0 });
         WHEELS.forEach((w) =>
           gsap.set(`.cs-wheel-${w.id}`, { xPercent: (w.dx / w.width) * 100, yPercent: (w.dy / w.height) * 100, scale: w.scale }),
@@ -101,7 +113,7 @@ export function CarShowcase({ product }: { product?: Product }) {
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: root.current, start: "top top", end: "+=560%", scrub: 0.6, pin: true, anticipatePin: 1 },
+          scrollTrigger: { trigger: root.current, start: "top top", end: "+=560%", scrub: 0.6, pin: true, anticipatePin: 1, invalidateOnRefresh: true },
           onUpdate: () => setSeated(tl.time() >= SEATED),
         });
 
@@ -156,24 +168,28 @@ export function CarShowcase({ product }: { product?: Product }) {
 
           // 5. The camera pulls back as the base rises out of the floor; the car hovers over it, then drops on.
           .to(".cs-cap-2", { autoAlpha: 0, y: -16, duration: 0.4 }, 8.9)
-          .to(".cs-turn", { scale: LAND.scale, xPercent: LAND.xPercent, yPercent: LAND.yPercent - 22, duration: 1.1, ease: "power2.inOut" }, 8.9)
+          .to(".cs-turn", { scale: LAND.scale, rotate: LAND.rotate, xPercent: LAND.xPercent, yPercent: LAND.yPercent - HOVER, duration: 0.95, ease: "power2.inOut" }, 8.9)
           .fromTo(".cs-base", { autoAlpha: 0, yPercent: 45 }, { autoAlpha: 1, yPercent: 0, duration: 1.0, ease: "power3.out" }, 9.0)
-          .to(".cs-turn", { yPercent: LAND.yPercent, duration: 0.45, ease: "power3.in" }, 10.0)
-          // Touchdown: a flash across the plate hides the swap to the photo of the car on its base.
-          .set(".cs-land", { scaleX: 0.3, autoAlpha: 1 }, 10.45)
-          .to(".cs-land", { scaleX: 1.6, autoAlpha: 0, duration: 0.6, ease: "power2.out" }, 10.45)
-          .to(".cs-shake", { y: 7, duration: 0.05, repeat: 3, yoyo: true }, 10.45)
-          .to(".cs-scene-car, .cs-front", { autoAlpha: 1, duration: 0.12 }, 10.45)
-          .to(".cs-turn", { autoAlpha: 0, duration: 0.12 }, 10.5)
-          .to(".cs-base", { autoAlpha: 0, duration: 0.01 }, 10.6)
+          // While it hovers, the three-quarter shot morphs into the same photo warped to the base's angle.
+          .fromTo(".cs-car-land", { autoAlpha: 0, yPercent: -HOVER }, { autoAlpha: 1, duration: 0.35 }, 9.7)
+          .to(".cs-turn", { autoAlpha: 0, duration: 0.3 }, 9.8)
+          .to(".cs-car-land", { yPercent: 0, duration: 0.45, ease: "power3.in" }, 10.05)
+          // Touchdown: a soft flash across the plate as the photo of the car on its base takes over.
+          .set(".cs-land", { scaleX: 0.4, autoAlpha: 0.8 }, 10.5)
+          .to(".cs-land", { scaleX: 1.4, autoAlpha: 0, duration: 0.6, ease: "power2.out" }, 10.5)
+          .to(".cs-shake", { y: 6, duration: 0.05, repeat: 3, yoyo: true }, 10.5)
+          .to(".cs-scene-car, .cs-front", { autoAlpha: 1, duration: 0.2 }, 10.5)
+          .to(".cs-car-land", { autoAlpha: 0, duration: 0.2 }, 10.55)
+          .to(".cs-base", { autoAlpha: 0, duration: 0.01 }, 10.75)
           .fromTo(".cs-cap-3", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 10.6)
 
-          // 6. The helmet drops in from above and slides down behind the halo into the cockpit.
-          .fromTo(".cs-helmet", { autoAlpha: 1, yPercent: -150, rotate: -10 }, { yPercent: 0, rotate: 0, duration: 1.0, ease: "power2.in", immediateRender: false }, 10.9)
-          .set(".cs-helmet", { autoAlpha: 0 }, 10.89)
-          .to(".cs-helmet", { yPercent: -4, duration: 0.1, ease: "power1.out" }, 11.9)
-          .to(".cs-helmet", { yPercent: 0, duration: 0.25, ease: "bounce.out" }, 12.0)
+          // 6. The helmet drops in from above and slides down behind the halo into the cockpit, then the
+          // final photo (the car with its helmet on) fades in over the layers.
+          .fromTo(".cs-helmet", { y: () => -window.innerHeight, rotate: -10 }, { y: 0, rotate: 0, duration: 1.0, ease: "power2.in" }, 10.9)
+          .to(".cs-helmet", { y: -10, duration: 0.1, ease: "power1.out" }, 11.9)
+          .to(".cs-helmet", { y: 0, duration: 0.2, ease: "bounce.out" }, 12.0)
           .to(".cs-shake", { y: 4, duration: 0.04, repeat: 3, yoyo: true }, 11.9)
+          .to(".cs-final-photo", { autoAlpha: 1, duration: 0.25 }, 12.15)
           .to(".cs-cap-3", { autoAlpha: 0, y: -16, duration: 0.4 }, 12.1)
           .fromTo(".cs-cap-4", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 12.3)
 
@@ -241,18 +257,29 @@ export function CarShowcase({ product }: { product?: Product }) {
             <Image src={sceneBase} alt="" fill loading="eager" sizes="(max-width: 768px) 84vw, 940px" className="cs-base object-contain" />
             <Image
               src={sceneCar}
-              alt="MCL-40 model car on a carbon-weave base with red and white kerbs and a start/stop engine button"
+              alt=""
               fill
               loading="eager"
               sizes="(max-width: 768px) 84vw, 940px"
               className="cs-scene-car object-contain"
             />
+            <Image src={carLand} alt="" fill loading="eager" sizes="(max-width: 768px) 84vw, 940px" className="cs-car-land object-contain" />
             <div className="cs-helmet absolute" style={box(HELMET)}>
               <Image src={helmetImg} alt="" fill sizes="(max-width: 768px) 21vw, 240px" className="object-contain" />
-              <Image src={visorImg} alt="" fill sizes="(max-width: 768px) 21vw, 240px" className="cs-visor object-contain" />
             </div>
             <div className="cs-front absolute" style={box(FRONT)}>
-              <Image src={sceneFront} alt="" fill sizes="(max-width: 768px) 32vw, 360px" className="object-contain" />
+              <Image src={sceneFront} alt="" fill sizes="(max-width: 768px) 34vw, 400px" className="object-contain" />
+            </div>
+            <Image
+              src={sceneFinal}
+              alt="MCL-40 model car with the driver's helmet in the cockpit, on its carbon-weave kerb base"
+              fill
+              loading="eager"
+              sizes="(max-width: 768px) 84vw, 940px"
+              className="cs-final-photo object-contain"
+            />
+            <div className="cs-visor absolute" style={box(VISOR)}>
+              <Image src={visorImg} alt="" fill sizes="(max-width: 768px) 16vw, 180px" className="object-contain" />
             </div>
             {/* Over the front of the car too, so the light falling on it isn't cut off where the helmet layers sit. */}
             <Image src={kerbLight} alt="" fill sizes="(max-width: 768px) 84vw, 940px" className="cs-kerb object-contain" />

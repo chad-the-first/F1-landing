@@ -340,7 +340,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* The car on its base. Its layers start hidden and the scroll story brings them in. */
-.cs-base, .cs-scene-car, .cs-front, .cs-helmet, .cs-cap-3, .cs-cap-4, .cs-land { visibility: hidden; opacity: 0; }
+.cs-base, .cs-car-land, .cs-scene-car, .cs-front, .cs-helmet, .cs-final-photo, .cs-cap-3, .cs-cap-4, .cs-land { visibility: hidden; opacity: 0; }
 .cs-scene { pointer-events: none; }
 .cs-land {
   position: absolute;
@@ -424,7 +424,7 @@ html.lenis, html.lenis body { height: auto; }
 @keyframes cs-bob { to { translate: 0 -5px; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .cs-scene-car, .cs-front, .cs-helmet, .cs-cap-4 { visibility: visible; opacity: 1; }
+  .cs-final-photo, .cs-cap-4 { visibility: visible; opacity: 1; }
   .cs-scene[data-on] .cs-kerb, .cs-scene[data-on] .cs-btn-light, .cs-scene[data-on] .cs-visor { animation: none; opacity: 1; }
   .cs-start::before, .cs-start::after, .cs-start-tag { animation: none; }
 }
