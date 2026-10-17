@@ -12,6 +12,7 @@ import { Hero } from "./Hero";
 import { FigureStack } from "./FigureStack";
 import { Podium } from "./Podium";
 import { CarShowcase } from "./CarShowcase";
+import { CarsSoon, HelmetsSoon } from "./ComingSoon";
 import { PODIUM_SLUG } from "@/lib/bundle";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -169,9 +170,13 @@ export function Landing({ products }: { products: Product[] }) {
         </div>
       </section>
 
+      <HelmetsSoon />
+
       <Podium products={products} />
 
       <CarShowcase product={carProduct} />
+
+      <CarsSoon />
 
       {/* Full collection */}
       <section id="shop" className="px-5 py-32 md:px-12">

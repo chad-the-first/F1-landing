@@ -73,31 +73,44 @@ export function Hero() {
       </div>
 
       <div className="hero-ui absolute inset-x-0 bottom-14 px-5 md:bottom-10">
-        <div className="hero-fade flex flex-col items-center gap-3">
+        <div className="hero-fade relative flex flex-col items-center gap-3">
         <span className="text-[11px] uppercase tracking-[0.35em] text-white/50">Pick your team</span>
-        <div role="radiogroup" aria-label="Team" onKeyDown={onKeyDown} className="flex gap-1 rounded-full bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur">
-          {teams.map((t) => {
-            const active = t.id === team.id;
-            return (
-              <button
-                key={t.id}
-                data-id={t.id}
-                role="radio"
-                aria-checked={active}
-                tabIndex={active ? 0 : -1}
-                onClick={() => choose(t.id)}
-                className="relative flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest transition-colors md:px-6 md:text-sm"
-                style={{ color: active ? "var(--accent-ink)" : "rgba(255,255,255,0.7)" }}
-              >
-                {active && (
-                  <motion.span layoutId="team-pill" className="absolute inset-0 rounded-full bg-accent" transition={{ type: "spring", stiffness: 400, damping: 34 }} />
-                )}
-                <span className="relative h-2 w-2 rounded-full ring-1 ring-black/20" style={{ backgroundColor: t.swatch }} />
-                <span className="relative">{t.name}</span>
-              </button>
-            );
-          })}
+        <div className="flex items-center rounded-full bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur">
+          <div role="radiogroup" aria-label="Team" onKeyDown={onKeyDown} className="flex gap-1">
+            {teams.map((t) => {
+              const active = t.id === team.id;
+              return (
+                <button
+                  key={t.id}
+                  data-id={t.id}
+                  role="radio"
+                  aria-checked={active}
+                  tabIndex={active ? 0 : -1}
+                  onClick={() => choose(t.id)}
+                  className="relative flex items-center gap-2 whitespace-nowrap rounded-full px-3 py-2.5 text-[11px] font-semibold uppercase tracking-widest transition-colors md:px-6 md:text-sm"
+                  style={{ color: active ? "var(--accent-ink)" : "rgba(255,255,255,0.7)" }}
+                >
+                  {active && (
+                    <motion.span layoutId="team-pill" className="absolute inset-0 rounded-full bg-accent" transition={{ type: "spring", stiffness: 400, damping: 34 }} />
+                  )}
+                  <span className="relative h-2 w-2 rounded-full ring-1 ring-black/20" style={{ backgroundColor: t.swatch }} />
+                  <span className="relative">{t.name}</span>
+                </button>
+              );
+            })}
+          </div>
+          {/* Not a team: an empty, locked slot on the grid that teases the teams still to come. */}
+          <span className="mx-0.5 w-px self-stretch bg-white/10 md:mx-1" aria-hidden />
+          <span className="hero-soon relative flex items-center gap-2 whitespace-nowrap rounded-full px-2.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-white/60 md:px-5 md:text-sm">
+            <span className="hero-soon-ring" aria-hidden />
+            <span className="hero-soon-dot relative h-2 w-2 rounded-full" aria-hidden />
+            <span className="relative hidden md:inline">More soon</span>
+            <span className="relative md:hidden" aria-hidden>+</span>
+          </span>
         </div>
+        <span className="hero-soon-line absolute top-full mt-3 whitespace-nowrap text-[10px] uppercase tracking-[0.3em] md:text-[11px]">
+          More teams joining the grid soon
+        </span>
         </div>
       </div>
 
