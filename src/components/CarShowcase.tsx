@@ -64,9 +64,9 @@ const STREAKS = [
 // - the base alone (same shot), which rises in first;
 // - the car itself, cut out of that photo with its helmet taken out, which drops onto the base;
 // - the same photo with the helmet taken out (only the cockpit behind it is filled in, from the no-helmet photo);
-// - the helmet, cut out of that photo, which drops into the cockpit and lands exactly on itself.
+// - your helmet photo, scaled onto the helmet in that photo, which drops into the cockpit.
 const SCENE = { width: 76.855 };
-const HELMET = { left: 32.529, top: 7.182, width: 23.118, height: 41.273 };
+const HELMET = { left: 32.647, top: 6.182, width: 22.294, height: 42.182 };
 // The halo and the cockpit rim from the same photo, layered over the helmet so it slides in behind them.
 const FRONT = { left: 34.294, top: 37.818, width: 21, height: 11.545 };
 const VISOR = { left: 36.706, top: 26.273, width: 18.176, height: 8.091 };
@@ -183,15 +183,14 @@ export function CarShowcase({ product }: { product?: Product }) {
           .to(".cs-base", { autoAlpha: 0, duration: 0.01 }, 10.75)
           .fromTo(".cs-cap-3", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 10.6)
 
-          // 6. The helmet drops in from above and slides down behind the halo into the cockpit, landing on the
-          // final photo's own helmet. The final photo fades in over the layers, then the dropped helmet is
-          // hidden so none of it can show around the edges.
+          // 6. The helmet photo drops in from above and slides down behind the halo into the cockpit, then it
+          // fades out as the final photo fades in over the layers, so none of it shows around the edges.
           .fromTo(".cs-helmet", { y: () => -window.innerHeight, rotate: -10 }, { y: 0, rotate: 0, duration: 1.0, ease: "power2.in" }, 10.9)
           .to(".cs-helmet", { y: -10, duration: 0.1, ease: "power1.out" }, 11.9)
           .to(".cs-helmet", { y: 0, duration: 0.2, ease: "bounce.out" }, 12.0)
           .to(".cs-shake", { y: 4, duration: 0.04, repeat: 3, yoyo: true }, 11.9)
           .to(".cs-final-photo", { autoAlpha: 1, duration: 0.2 }, 12.2)
-          .to(".cs-helmet-in", { opacity: 0, duration: 0.01 }, 12.4)
+          .to(".cs-helmet-in", { opacity: 0, duration: 0.15 }, 12.25)
           .to(".cs-cap-3", { autoAlpha: 0, y: -16, duration: 0.4 }, 12.1)
           .fromTo(".cs-cap-4", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 12.3)
 
