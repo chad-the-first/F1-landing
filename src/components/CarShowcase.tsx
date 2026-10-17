@@ -238,11 +238,12 @@ export function CarShowcase({ product }: { product?: Product }) {
           {/* The car on its base: the base alone rises in, then the photo of the car on it takes over at
               touchdown, and the helmet drops in between the car and the halo's front bar. */}
           <div className="cs-scene absolute top-0 h-full" data-on={lit || undefined} style={{ left: `${(100 - SCENE.width) / 2}%`, width: `${SCENE.width}%` }}>
-            <Image src={sceneBase} alt="" fill sizes="(max-width: 768px) 84vw, 940px" className="cs-base object-contain" />
+            <Image src={sceneBase} alt="" fill loading="eager" sizes="(max-width: 768px) 84vw, 940px" className="cs-base object-contain" />
             <Image
               src={sceneCar}
               alt="MCL-40 model car on a carbon-weave base with red and white kerbs and a start/stop engine button"
               fill
+              loading="eager"
               sizes="(max-width: 768px) 84vw, 940px"
               className="cs-scene-car object-contain"
             />
@@ -301,7 +302,7 @@ export function CarShowcase({ product }: { product?: Product }) {
               {WHEELS.filter((w) => !w.front).map((w) => (
                 <Wheel key={w.id} w={w} />
               ))}
-              <Image src={bodyImg} alt="" fill sizes="(max-width: 768px) 100vw, 1250px" className="object-contain" />
+              <Image src={bodyImg} alt="" fill loading="eager" sizes="(max-width: 768px) 100vw, 1250px" className="object-contain" />
               {WHEELS.filter((w) => w.front).map((w) => (
                 <Wheel key={w.id} w={w} />
               ))}
@@ -340,7 +341,9 @@ export function CarShowcase({ product }: { product?: Product }) {
               </li>
             ))}
           </ul>
-          <AddToCart product={product} accent="#ff8000" ink="#141313" />
+          <div className="shrink-0">
+            <AddToCart product={product} accent="#ff8000" ink="#141313" />
+          </div>
         </div>
       </div>
     </section>
