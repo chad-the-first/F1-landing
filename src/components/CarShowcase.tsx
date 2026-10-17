@@ -19,7 +19,6 @@ import wheelFR from "../../public/images/car/wheel-fr.webp";
 import sceneBase from "../../public/images/car/base/scene-base.webp";
 import sceneCar from "../../public/images/car/base/scene-car.webp";
 import sceneFront from "../../public/images/car/base/scene-front.webp";
-import sceneFinal from "../../public/images/car/base/scene-final.webp";
 import carLand from "../../public/images/car/base/car-land.webp";
 import helmetImg from "../../public/images/car/base/helmet.webp";
 import visorImg from "../../public/images/car/base/visor-lit.webp";
@@ -103,7 +102,7 @@ export function CarShowcase({ product }: { product?: Product }) {
         const drive = { duration: 2.4, ease: "power3.out" };
 
         gsap.set(".cs-exploded, .cs-mag, .cs-wire, .cs-cap-1, .cs-cap-2, .cs-cap-3, .cs-cap-4, .cs-final", { autoAlpha: 0 });
-        gsap.set(".cs-base, .cs-car-land, .cs-scene-car, .cs-front, .cs-final-photo", { autoAlpha: 0 });
+        gsap.set(".cs-base, .cs-car-land, .cs-scene-car, .cs-front", { autoAlpha: 0 });
         // The helmet never fades: it waits out of sight above the screen until it drops.
         gsap.set(".cs-helmet", { autoAlpha: 1, y: () => -window.innerHeight });
         gsap.set(".cs-turn", { autoAlpha: 0 });
@@ -183,14 +182,11 @@ export function CarShowcase({ product }: { product?: Product }) {
           .to(".cs-base", { autoAlpha: 0, duration: 0.01 }, 10.75)
           .fromTo(".cs-cap-3", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 10.6)
 
-          // 6. The helmet photo drops in from above and slides down behind the halo into the cockpit, then it
-          // fades out as the final photo fades in over the layers, so none of it shows around the edges.
+          // 6. The helmet photo drops in from above and slides down behind the halo into the cockpit, where it stays.
           .fromTo(".cs-helmet", { y: () => -window.innerHeight, rotate: -10 }, { y: 0, rotate: 0, duration: 1.0, ease: "power2.in" }, 10.9)
           .to(".cs-helmet", { y: -10, duration: 0.1, ease: "power1.out" }, 11.9)
           .to(".cs-helmet", { y: 0, duration: 0.2, ease: "bounce.out" }, 12.0)
           .to(".cs-shake", { y: 4, duration: 0.04, repeat: 3, yoyo: true }, 11.9)
-          .to(".cs-final-photo", { autoAlpha: 1, duration: 0.2 }, 12.2)
-          .to(".cs-helmet-in", { opacity: 0, duration: 0.15 }, 12.25)
           .to(".cs-cap-3", { autoAlpha: 0, y: -16, duration: 0.4 }, 12.1)
           .fromTo(".cs-cap-4", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 12.3)
 
@@ -259,7 +255,7 @@ export function CarShowcase({ product }: { product?: Product }) {
             <Image
               src={sceneCar}
               quality={90}
-              alt=""
+              alt="MCL-40 model car on its carbon-weave kerb base"
               fill
               loading="eager"
               sizes="(max-width: 768px) 84vw, 940px"
@@ -267,22 +263,11 @@ export function CarShowcase({ product }: { product?: Product }) {
             />
             <Image src={carLand} quality={90} alt="" fill loading="eager" sizes="(max-width: 768px) 84vw, 940px" className="cs-car-land object-contain" />
             <div className="cs-helmet absolute" style={box(HELMET)}>
-              <div className="cs-helmet-in absolute inset-0">
-                <Image src={helmetImg} quality={90} alt="" fill sizes="(max-width: 768px) 21vw, 240px" className="object-contain" />
-              </div>
+              <Image src={helmetImg} quality={90} alt="" fill sizes="(max-width: 768px) 21vw, 240px" className="object-contain" />
             </div>
             <div className="cs-front absolute" style={box(FRONT)}>
               <Image src={sceneFront} quality={90} alt="" fill sizes="(max-width: 768px) 18vw, 260px" className="object-contain" />
             </div>
-            <Image
-              src={sceneFinal}
-              quality={90}
-              alt="MCL-40 model car with the driver's helmet in the cockpit, on its carbon-weave kerb base"
-              fill
-              loading="eager"
-              sizes="(max-width: 768px) 84vw, 940px"
-              className="cs-final-photo object-contain"
-            />
             <div className="cs-visor absolute" style={box(VISOR)}>
               <Image src={visorImg} alt="" fill sizes="(max-width: 768px) 16vw, 180px" className="object-contain" />
             </div>
