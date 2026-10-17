@@ -178,7 +178,6 @@ export function Podium({ products }: { products: Product[] }) {
               start: "top bottom",
               end: "bottom top",
               scrub: true,
-              refreshPriority: -1,
             },
           },
         );
@@ -221,7 +220,6 @@ export function Podium({ products }: { products: Product[] }) {
               trigger: st,
               start: "top 70%",
               once: true,
-              refreshPriority: -1,
             },
             defaults: { ease: "power4.out" },
           })

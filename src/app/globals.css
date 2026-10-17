@@ -229,3 +229,113 @@ html.lenis, html.lenis body { height: auto; }
   .pd-beam-sway, .pd-dust, .pd-floor, .pd-ring, .pd-picked { animation: none; }
   .pd-dust { display: none; }
 }
+
+/* ---- MCL-40 car showcase (CarShowcase) ---- */
+/* Layers that only appear later in the scroll story start hidden, so nothing stacks up before GSAP runs. */
+.cs-turn, .cs-exploded, .cs-cap-1, .cs-cap-2, .cs-final, .cs-mag, .cs-wire, .cs-burst, .cs-ghost { visibility: hidden; opacity: 0; }
+
+/* Dark glossy floor: a contact shadow under the car and a faint papaya reflection line. */
+.cs-floor {
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  top: 84%;
+  height: 18%;
+  background:
+    radial-gradient(ellipse 48% 30% at 50% 40%, rgba(0, 0, 0, 0.85), transparent 70%),
+    radial-gradient(ellipse 50% 3% at 50% 42%, rgba(255, 128, 0, 0.35), transparent 100%);
+  pointer-events: none;
+}
+
+/* Speed streaks rushing past while the car drives in. */
+.cs-streaks { position: absolute; inset: 0 -20%; overflow: hidden; container-type: inline-size; pointer-events: none; }
+.cs-streaks span {
+  position: absolute;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.55) 70%, #ff8000);
+  animation: cs-streak 0.9s linear infinite;
+}
+@keyframes cs-streak {
+  from { transform: translateX(100cqw); }
+  to { transform: translateX(-100%); }
+}
+
+/* Motion-blurred copies trailing the car. */
+.cs-ghost { filter: blur(4px) saturate(1.4); }
+.cs-spin, .cs-wheel, .cs-side { will-change: transform; }
+
+/* Wheels hover gently, lit papaya, while they are off the car. */
+.cs-float { animation: cs-float 2.6s ease-in-out infinite alternate; }
+.cs-float img { filter: drop-shadow(0 0 14px rgba(255, 128, 0, 0.35)); }
+.cs-wheel-rr .cs-float { animation-delay: -0.7s; }
+.cs-wheel-fr .cs-float { animation-delay: -1.9s; }
+.cs-wheel-rl .cs-float { animation-delay: -1.3s; }
+@keyframes cs-float {
+  from { transform: translateY(-2.5%) rotate(-1.5deg); }
+  to { transform: translateY(2.5%) rotate(1.5deg); }
+}
+
+/* Magnetic field lines from each hub to its wheel, flowing toward the hub. */
+.cs-wire {
+  fill: none;
+  stroke: #ff8000;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 5 9;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 4px rgba(255, 128, 0, 0.9));
+  animation: cs-flow 0.6s linear infinite;
+}
+@keyframes cs-flow { to { stroke-dashoffset: 28; } }
+
+/* Each hub: pulsing magnet rings while the wheel is off, and a flash when it connects. */
+.cs-hub { position: absolute; width: 11%; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none; }
+.cs-mag, .cs-burst { position: absolute; inset: 0; border-radius: 50%; }
+.cs-mag::before, .cs-mag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 128, 0, 0.9);
+  box-shadow: 0 0 18px rgba(255, 128, 0, 0.6), inset 0 0 18px rgba(255, 128, 0, 0.4);
+  animation: cs-ring 1.4s ease-out infinite;
+}
+.cs-mag::after { animation-delay: -0.7s; border-color: rgba(255, 255, 255, 0.7); }
+@keyframes cs-ring {
+  from { transform: scale(0.25); opacity: 1; }
+  to { transform: scale(1.15); opacity: 0; }
+}
+.cs-burst {
+  inset: -40%;
+  background: radial-gradient(circle, #fff 0%, rgba(255, 220, 170, 0.9) 18%, rgba(255, 128, 0, 0.55) 40%, transparent 70%);
+  mix-blend-mode: screen;
+}
+
+/* Light sweep: a soft white band crossing the car, clipped to the car's silhouette. */
+.cs-sweep {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  -webkit-mask: var(--mask) center / 100% 100% no-repeat;
+  mask: var(--mask) center / 100% 100% no-repeat;
+}
+.cs-sweep-band {
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: -30%;
+  width: 30%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.08) 30%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0.08) 70%, transparent);
+}
+
+/* Without motion: no pin, just the finished car with its wheels-off caption and the buy panel. */
+@media (prefers-reduced-motion: reduce) {
+  .car-show { height: auto; min-height: 100svh; }
+  .cs-side, .cs-streaks, .cs-hub, .cs-cap-0, .cs-cap-2 { display: none; }
+  .cs-turn, .cs-cap-1, .cs-final { visibility: visible; opacity: 1; }
+  .cs-final { grid-row-start: 2; margin-top: 1.5rem; }
+}

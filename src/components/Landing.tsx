@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,6 +11,7 @@ import { CartButton } from "./CartDrawer";
 import { Hero } from "./Hero";
 import { FigureStack } from "./FigureStack";
 import { Podium } from "./Podium";
+import { CarShowcase } from "./CarShowcase";
 import { PODIUM_SLUG } from "@/lib/bundle";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -71,19 +71,16 @@ export function Landing({ products }: { products: Product[] }) {
           gsap.fromTo(panel.querySelector(".figure"), { yPercent: 8, rotate: 2 }, { yPercent: -8, rotate: -2, ease: "none", scrollTrigger: st });
         });
 
-        // Car: the studio shot opens up from a slit as you arrive.
-        gsap
-          .timeline({ scrollTrigger: { trigger: ".car", start: "top 80%", end: "center center", scrub: true } })
-          .fromTo(".car-frame", { clipPath: "inset(35% 40% 35% 40% round 24px)" }, { clipPath: "inset(0% 0% 0% 0% round 24px)", ease: "none" }, 0)
-          .fromTo(".car-img", { scale: 1.35 }, { scale: 1, ease: "none" }, 0)
-          .from(".car-title", { xPercent: -30, opacity: 0, ease: "none" }, 0);
-        gsap.from(".car-feature", { y: 30, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: ".car-features", start: "top 85%" } });
-
         ScrollTrigger.batch(".grid-card", {
           start: "top 90%",
           onEnter: (els) => gsap.fromTo(els, { y: 60, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" }),
         });
       });
+
+      // Child sections (podium, car) create their pins before this effect runs, so put every trigger
+      // back in page order and recalculate, letting each pin push the ones below it down.
+      ScrollTrigger.sort();
+      ScrollTrigger.refresh();
     },
     { scope: root },
   );
@@ -154,30 +151,7 @@ export function Landing({ products }: { products: Product[] }) {
 
       <Podium products={products} />
 
-      {/* Car showcase */}
-      <section className="car bg-studio px-5 py-28 text-ink md:px-12 md:py-40">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-[1.1fr_1fr] md:gap-20">
-          <div className="car-frame relative aspect-[3/4] overflow-hidden rounded-3xl">
-            <Image src={car.image} alt="MCL-40 papaya race car model on a kerb-striped carbon display base" fill sizes="(max-width: 768px) 100vw, 55vw" className="car-img object-cover" />
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-[#ff8000]">Desk display</p>
-            <h2 className="car-title mt-3 font-display text-[22vw] leading-[0.85] md:text-[9vw]">MCL-40</h2>
-            <p className="mt-6 max-w-md text-lg text-ink/70">
-              The papaya car, helmet in the cockpit, parked on a carbon-weave base with red and white kerbs and a start/stop engine plaque.
-            </p>
-            <ul className="car-features mt-10 divide-y divide-ink/10 border-y border-ink/10">
-              {["Driver helmet in the cockpit", "Kerb-striped carbon-weave base", "Start / stop engine plaque"].map((f, i) => (
-                <li key={f} className="car-feature flex items-center gap-6 py-4">
-                  <span className="font-mono text-sm text-ink/40">0{i + 1}</span>
-                  <span className="text-lg">{f}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-10"><AddToCart product={carProduct} accent="#ff8000" /></div>
-          </div>
-        </div>
-      </section>
+      <CarShowcase product={carProduct} />
 
       {/* Full collection */}
       <section id="shop" className="px-5 py-32 md:px-12">
