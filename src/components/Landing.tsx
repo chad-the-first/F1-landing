@@ -81,6 +81,26 @@ export function Landing({ products }: { products: Product[] }) {
       // back in page order and recalculate, letting each pin push the ones below it down.
       ScrollTrigger.sort();
       ScrollTrigger.refresh();
+
+      // Anything that changes the page's height after that (web fonts swapping in, late content) would leave
+      // every pin below it starting in the wrong place, so recalculate whenever the height changes on its own.
+      // Pin spacers change the height during a refresh too; those changes are recorded, not reacted to.
+      let height = document.body.scrollHeight;
+      let timer = 0;
+      const record = () => { height = document.body.scrollHeight; };
+      ScrollTrigger.addEventListener("refresh", record);
+      const observer = new ResizeObserver(() => {
+        if (document.body.scrollHeight === height) return;
+        clearTimeout(timer);
+        timer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+      });
+      observer.observe(document.body);
+      document.fonts?.ready.then(() => ScrollTrigger.refresh());
+      return () => {
+        observer.disconnect();
+        clearTimeout(timer);
+        ScrollTrigger.removeEventListener("refresh", record);
+      };
     },
     { scope: root },
   );
