@@ -4,10 +4,27 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import Image from "next/image";
+import norrisThumb from "../../public/images/norris-helmet-thumb.webp";
+import hamiltonThumb from "../../public/images/hamilton-helmet-thumb.webp";
+import verstappenThumb from "../../public/images/verstappen-helmet-thumb.webp";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+const HELMETS = [norrisThumb, hamiltonThumb, verstappenThumb];
+
 const FEATURES = [
+  {
+    k: "Modular",
+    t: "Any helmet. Any driver. Any car.",
+    d: "Every helmet fits every driver figure and every car, so you can swap them around and build the line-up you want.",
+    wide: true,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 7h11m0 0-3.5-3.5M15 7l-3.5 3.5M20 17H9m0 0 3.5-3.5M9 17l3.5 3.5" />
+      </svg>
+    ),
+  },
   {
     k: "Key station",
     t: "Your keys finally have a home.",
@@ -55,7 +72,7 @@ const FEATURES = [
   },
 ];
 
-// The four reasons the pieces earn their spot on a desk, rising in as the section scrolls into view.
+// The reasons the pieces earn their spot on a desk, rising in as the section scrolls into view.
 export function Features() {
   const root = useRef<HTMLElement>(null);
 
@@ -86,16 +103,31 @@ export function Features() {
         <h2 id="features-title" className="mt-4 max-w-3xl font-display text-5xl uppercase leading-[0.95] md:text-7xl">
           Made to live on your desk
         </h2>
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <li key={f.k} className="feat-card group relative overflow-hidden rounded-3xl bg-white/[0.04] p-7 ring-1 ring-white/10">
+            <li
+              key={f.k}
+              className={`feat-card group relative overflow-hidden rounded-3xl bg-white/[0.04] p-7 ring-1 ring-white/10 ${f.wide ? "sm:col-span-2 md:flex md:items-center md:gap-10" : ""}`}
+            >
               <span className="feat-glow" aria-hidden />
-              <span className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-ink [&>svg]:h-6 [&>svg]:w-6">
-                {f.icon}
-              </span>
-              <p className="relative mt-8 text-xs uppercase tracking-[0.3em] text-accent">{f.k}</p>
-              <h3 className="relative mt-2 text-2xl font-semibold leading-tight">{f.t}</h3>
-              <p className="relative mt-3 text-white/60">{f.d}</p>
+              <div className="relative md:flex-1">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-ink [&>svg]:h-6 [&>svg]:w-6">
+                  {f.icon}
+                </span>
+                <p className="mt-8 text-xs uppercase tracking-[0.3em] text-accent">{f.k}</p>
+                <h3 className="mt-2 text-2xl font-semibold leading-tight">{f.t}</h3>
+                <p className="mt-3 text-white/60">{f.d}</p>
+              </div>
+              {/* The three helmets taking turns in the spotlight, to show they're interchangeable. */}
+              {f.wide && (
+                <div className="feat-swap relative mt-8 flex shrink-0 items-end justify-center gap-3 md:mt-0" aria-hidden>
+                  {HELMETS.map((h, i) => (
+                    <span key={i} className="feat-swap-helmet relative h-24 w-20 md:h-32 md:w-28" style={{ animationDelay: `${i * 1.2}s` }}>
+                      <Image src={h} alt="" fill sizes="112px" className="object-contain" />
+                    </span>
+                  ))}
+                </div>
+              )}
             </li>
           ))}
         </ul>

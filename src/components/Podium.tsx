@@ -482,7 +482,7 @@ export function Podium({ products }: { products: Product[] }) {
           {/* Builder */}
           <div className="pd-panel">
             <p className="text-lg text-white/70">
-              Pick any three drivers, three of the same or one of each. Put them in your order, and the real carbon fiber podium is on us.
+              Pick any three drivers, three of the same or one of each. Put them in your order, and the real carbon fiber podium is on us. Every helmet fits every figure, so swap them around whenever you like.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-2 text-xs uppercase tracking-widest">

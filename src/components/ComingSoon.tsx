@@ -87,7 +87,7 @@ export function HelmetsSoon() {
         </div>
 
         <p className="hs-fade mt-12 max-w-md text-white/60">
-          More drivers and their helmets are on their way to the grid. Keep your eyes on the lights.
+          More drivers and their helmets are on their way, and every new helmet will fit the figures and cars you already own. Keep your eyes on the lights.
         </p>
         <p className="hs-fade mt-6 inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.3em] ring-1 ring-white/15">
           <span className="hs-blink h-2 w-2 rounded-full bg-accent" aria-hidden />

@@ -82,7 +82,7 @@ const CAPTIONS = [
   { k: "Magnetic wheels", t: "Pull a wheel. It comes right off.", d: "All four wheels are detachable and held on by magnets." },
   { k: "Click", t: "Bring it close and it snaps back.", d: "Line a wheel up with its hub and the magnet does the rest." },
   { k: "The base", t: "Parked on real carbon, between the kerbs.", d: "A base made with real carbon fiber plates, with red and white kerbs and a start/stop engine button. It doubles as a home for your keys." },
-  { k: "Start engine", t: "Helmet in. Lights on.", d: "Press START ENGINE STOP to switch the kerb lights and visor on and off. USB-C rechargeable, and one charge lasts for weeks." },
+  { k: "Start engine", t: "Helmet in. Lights on.", d: "Any helmet in the range fits the cockpit. Press START ENGINE STOP to switch the lights on and off. USB-C rechargeable, and one charge lasts for weeks." },
 ];
 
 export function CarShowcase({ product }: { product?: Product }) {
@@ -352,7 +352,7 @@ export function CarShowcase({ product }: { product?: Product }) {
         ))}
         <div className="cs-final col-start-1 row-start-1 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <ul className="flex flex-wrap gap-2 text-xs uppercase tracking-widest text-white/80">
-            {["Hand painted", "Magnetic detachable wheels", "Real carbon fiber base", "Key station", "USB-C rechargeable"].map((f) => (
+            {["Hand painted", "Fits every helmet", "Magnetic detachable wheels", "Real carbon fiber base", "Key station", "USB-C rechargeable"].map((f) => (
               <li key={f} className="rounded-full border border-white/20 px-3 py-2">
                 {f}
               </li>

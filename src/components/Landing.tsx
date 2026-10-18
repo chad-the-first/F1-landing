@@ -124,7 +124,7 @@ export function Landing({ products }: { products: Product[] }) {
       {/* Marquee */}
       <section className="marquee -rotate-2 overflow-hidden bg-accent py-4 text-accent-ink transition-colors" aria-hidden>
         <div className="marquee-track whitespace-nowrap font-display text-5xl uppercase md:text-7xl">
-          {"Lights out and away we go ✦ Hand painted ✦ Real carbon fiber ✦ Never lose your keys ✦ USB-C rechargeable ✦ ".repeat(4)}
+          {"Lights out and away we go ✦ Hand painted ✦ Real carbon fiber ✦ Swap any helmet ✦ Never lose your keys ✦ USB-C rechargeable ✦ ".repeat(4)}
         </div>
       </section>
 

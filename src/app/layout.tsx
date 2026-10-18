@@ -11,7 +11,7 @@ const anton = Anton({ variable: "--font-anton", weight: "400", subsets: ["latin"
 
 export const metadata: Metadata = {
   title: "F1 Collectibles | Driver figures and desk displays",
-  description: "Hand-painted F1 driver figures and race car desk displays on real carbon fiber bases, with a key station and USB-C rechargeable lights.",
+  description: "Hand-painted F1 driver figures and race car desk displays on real carbon fiber bases. Every helmet fits every driver and car, with a key station and USB-C rechargeable lights.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

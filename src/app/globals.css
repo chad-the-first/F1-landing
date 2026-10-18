@@ -619,3 +619,12 @@ html.lenis, html.lenis body { height: auto; }
   .feat-card { transition: none; }
   .feat-card:hover { transform: none; }
 }
+/* The modular card's helmets take turns lifting into the light. */
+.feat-swap-helmet { opacity: 0.45; filter: grayscale(0.6); animation: feat-swap 3.6s ease-in-out infinite; }
+@keyframes feat-swap {
+  0%, 40%, 100% { opacity: 0.45; filter: grayscale(0.6); transform: none; }
+  10%, 30% { opacity: 1; filter: grayscale(0) drop-shadow(0 8px 18px color-mix(in srgb, var(--accent) 45%, transparent)); transform: translateY(-10px) scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feat-swap-helmet { animation: none; opacity: 1; filter: none; }
+}
