@@ -56,7 +56,7 @@ export function PodiumBase({ sizes, className = "", style }: { sizes: string; cl
       <div className="absolute inset-0 overflow-hidden">
         <Image src={podiumP2} alt="" fill sizes={sizes} draggable={false} className="pd-step-2 object-contain" />
         <Image src={podiumP3} alt="" fill sizes={sizes} draggable={false} className="pd-step-3 object-contain" />
-        <Image src={podiumP1} alt="Three-step carbon-weave podium" fill sizes={sizes} draggable={false} className="pd-step-1 object-contain" />
+        <Image src={podiumP1} alt="Three-step carbon fiber podium" fill sizes={sizes} draggable={false} className="pd-step-1 object-contain" />
       </div>
       {/* The 1, 2, 3 tags and the F1 plaque light up cold white. */}
       {TAGS.map((t) => (

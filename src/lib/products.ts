@@ -9,11 +9,11 @@ const demo = (id: number, name: string, slug: string, amount: number, image: str
 });
 
 export const demoProducts: Product[] = [
-  demo(1, "Lando Norris Figure", "lando-norris-figure", 7900, "/images/figure-norris.webp", "2026 FW. Hungarian GP plaque on a carbon-weave base."),
-  demo(2, "Lewis Hamilton Figure", "lewis-hamilton-figure", 7900, "/images/figure-hamilton.webp", "2026 FW. Barcelona-Catalunya GP plaque on a carbon-weave base."),
-  demo(3, "Max Verstappen Figure", "max-verstappen-figure", 7900, "/images/figure-verstappen.webp", "2026 FW. Bahrain GP plaque on a carbon-weave base."),
-  demo(4, "MCL-40 Desk Display", "mcl40-desk-display", 14900, "/images/mcl40-display.webp", "Papaya race car on a kerb-striped carbon base."),
-  demo(5, "Podium Display", "podium-display", 4900, "/images/podium.webp", "Three-step carbon-weave podium for your figures. Free with any three figures."),
+  demo(1, "Lando Norris Figure", "lando-norris-figure", 7900, "/images/figure-norris.webp", "Hand painted, 2026 FW. Hungarian GP plaque on a real carbon fiber base."),
+  demo(2, "Lewis Hamilton Figure", "lewis-hamilton-figure", 7900, "/images/figure-hamilton.webp", "Hand painted, 2026 FW. Barcelona-Catalunya GP plaque on a real carbon fiber base."),
+  demo(3, "Max Verstappen Figure", "max-verstappen-figure", 7900, "/images/figure-verstappen.webp", "Hand painted, 2026 FW. Bahrain GP plaque on a real carbon fiber base."),
+  demo(4, "MCL-40 Desk Display", "mcl40-desk-display", 14900, "/images/mcl40-display.webp", "Hand-painted papaya race car on a real carbon fiber kerb base. USB-C rechargeable lights."),
+  demo(5, "Podium Display", "podium-display", 4900, "/images/podium.webp", "Three-step real carbon fiber podium for your figures. Free with any three figures."),
 ];
 
 export async function getProducts(): Promise<Product[]> {

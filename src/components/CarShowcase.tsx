@@ -78,11 +78,11 @@ const HOVER = 22;
 const SEATED = 12.05;
 
 const CAPTIONS = [
-  { k: "Lights out", t: "The papaya #1 car, in miniature.", d: "Halo, T-cam, front and rear wings, and the full papaya and black livery." },
+  { k: "Lights out", t: "The papaya #1 car, in miniature.", d: "Halo, T-cam, front and rear wings, and the full papaya and black livery, all painted by hand. No two are alike." },
   { k: "Magnetic wheels", t: "Pull a wheel. It comes right off.", d: "All four wheels are detachable and held on by magnets." },
   { k: "Click", t: "Bring it close and it snaps back.", d: "Line a wheel up with its hub and the magnet does the rest." },
-  { k: "The base", t: "Parked on carbon, between the kerbs.", d: "A carbon-weave display base with red and white kerbs and a start/stop engine button." },
-  { k: "Start engine", t: "Helmet in. Lights on.", d: "Press START ENGINE STOP on the base to switch the kerb lights and the visor on and off." },
+  { k: "The base", t: "Parked on real carbon, between the kerbs.", d: "A base made with real carbon fiber plates, with red and white kerbs and a start/stop engine button. It doubles as a home for your keys." },
+  { k: "Start engine", t: "Helmet in. Lights on.", d: "Press START ENGINE STOP to switch the kerb lights and visor on and off. USB-C rechargeable, and one charge lasts for weeks." },
 ];
 
 export function CarShowcase({ product }: { product?: Product }) {
@@ -255,7 +255,7 @@ export function CarShowcase({ product }: { product?: Product }) {
             <Image
               src={sceneCar}
               quality={90}
-              alt="MCL-40 model car on its carbon-weave kerb base"
+              alt="MCL-40 model car on its carbon fiber kerb base"
               fill
               loading="eager"
               sizes="(max-width: 768px) 84vw, 940px"
@@ -352,7 +352,7 @@ export function CarShowcase({ product }: { product?: Product }) {
         ))}
         <div className="cs-final col-start-1 row-start-1 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <ul className="flex flex-wrap gap-2 text-xs uppercase tracking-widest text-white/80">
-            {["Magnetic detachable wheels", "Helmet in the cockpit", "Carbon-weave kerb base", "Start / stop engine button"].map((f) => (
+            {["Hand painted", "Magnetic detachable wheels", "Real carbon fiber base", "Key station", "USB-C rechargeable"].map((f) => (
               <li key={f} className="rounded-full border border-white/20 px-3 py-2">
                 {f}
               </li>

@@ -109,7 +109,7 @@ export function Footer() {
         <div className="mt-20 grid gap-14 md:grid-cols-[1.1fr_1.4fr_0.7fr] md:gap-12">
           <div>
             <p className="font-display text-4xl uppercase leading-none tracking-wide md:text-5xl">F1 Collectibles</p>
-            <p className="mt-4 max-w-xs text-white/55">Hand-finished F1 driver figures and race car desk displays.</p>
+            <p className="mt-4 max-w-xs text-white/55">Hand-painted F1 figures and desk displays on real carbon fiber. A home for your keys, too.</p>
           </div>
 
           <div>

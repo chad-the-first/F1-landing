@@ -605,3 +605,17 @@ html.lenis, html.lenis body { height: auto; }
   .ft-social, .ft-social-icon, .ft-link { transition: none; }
   .ft-social:hover, .ft-social:focus-visible { transform: none; }
 }
+
+/* Feature cards: a soft accent glow follows the card on hover. */
+.feat-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.feat-card:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent); }
+.feat-glow {
+  position: absolute; inset: -40% -40% auto auto; width: 70%; aspect-ratio: 1; border-radius: 50%; opacity: 0.35;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 45%, transparent), transparent);
+  transition: opacity 0.3s ease;
+}
+.feat-card:hover .feat-glow { opacity: 0.8; }
+@media (prefers-reduced-motion: reduce) {
+  .feat-card { transition: none; }
+  .feat-card:hover { transform: none; }
+}

@@ -56,7 +56,7 @@ export function FigureStack({
       }}
     >
       <div className="fs-backglow" aria-hidden />
-      <Image src={item.body} alt={`${item.name} figure on a carbon-weave base`} fill sizes={sizes} draggable={false} className="object-contain" />
+      <Image src={item.body} alt={`${item.name} figure on a carbon fiber base`} fill sizes={sizes} draggable={false} className="object-contain" />
       <div className="fs-uplight" aria-hidden />
       <div className="fs-beam fs-beam-l" aria-hidden />
       <div className="fs-beam fs-beam-r" aria-hidden />

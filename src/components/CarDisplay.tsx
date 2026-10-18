@@ -36,7 +36,7 @@ export function CarDisplay({ sizes, className = "" }: { sizes: string; className
         }
       }}
     >
-      <Image src={sceneCar} alt="MCL-40 model car on its carbon-weave kerb base" fill sizes={sizes} draggable={false} className="object-contain" />
+      <Image src={sceneCar} alt="MCL-40 model car on its carbon fiber kerb base" fill sizes={sizes} draggable={false} className="object-contain" />
       <div className="absolute" style={box(HELMET)}>
         <Image src={helmetImg} alt="" fill sizes={sizes} draggable={false} className="object-contain" />
       </div>

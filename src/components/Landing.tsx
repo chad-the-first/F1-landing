@@ -14,6 +14,7 @@ import { Podium } from "./Podium";
 import { CarShowcase } from "./CarShowcase";
 import { CarsSoon, HelmetsSoon } from "./ComingSoon";
 import { Footer } from "./Footer";
+import { Features } from "./Features";
 import { PodiumBase } from "./PodiumBase";
 import { CarDisplay } from "./CarDisplay";
 import { PODIUM_SLUG } from "@/lib/bundle";
@@ -21,7 +22,7 @@ import { PODIUM_SLUG } from "@/lib/bundle";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const statement =
-  "Your favourite drivers, cast in miniature. Every figure stands on a carbon-weave base traced with the circuit and lap time of a race to remember.";
+  "Your favourite drivers, hand painted in miniature, so no two are alike. Every figure stands on a real carbon fiber base traced with the circuit and lap time of a race to remember, and gives your keys a home.";
 
 export function Landing({ products }: { products: Product[] }) {
   const root = useRef<HTMLDivElement>(null);
@@ -123,7 +124,7 @@ export function Landing({ products }: { products: Product[] }) {
       {/* Marquee */}
       <section className="marquee -rotate-2 overflow-hidden bg-accent py-4 text-accent-ink transition-colors" aria-hidden>
         <div className="marquee-track whitespace-nowrap font-display text-5xl uppercase md:text-7xl">
-          {"Lights out and away we go ✦ ".repeat(8)}
+          {"Lights out and away we go ✦ Hand painted ✦ Real carbon fiber ✦ Never lose your keys ✦ USB-C rechargeable ✦ ".repeat(4)}
         </div>
       </section>
 
@@ -135,6 +136,8 @@ export function Landing({ products }: { products: Product[] }) {
           ))}
         </p>
       </section>
+
+      <Features />
 
       {/* Driver series */}
       <section className="h-section relative h-[100svh] overflow-hidden" aria-label="Driver series">
@@ -165,6 +168,7 @@ export function Landing({ products }: { products: Product[] }) {
                 <dl className="mt-6 flex justify-center gap-8 text-sm md:justify-start">
                   <div><dt className="text-white/50">Plaque</dt><dd className="mt-1">{d.race}</dd></div>
                   <div><dt className="text-white/50">Lap</dt><dd className="mt-1 font-mono">{d.lap}</dd></div>
+                  <div><dt className="text-white/50">Finish</dt><dd className="mt-1">Hand painted</dd></div>
                 </dl>
                 <div className="mt-8"><AddToCart product={bySlug.get(d.slug)} accent={d.accent} /></div>
               </div>
