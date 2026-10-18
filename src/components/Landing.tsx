@@ -13,6 +13,7 @@ import { FigureStack } from "./FigureStack";
 import { Podium } from "./Podium";
 import { CarShowcase } from "./CarShowcase";
 import { CarsSoon, HelmetsSoon } from "./ComingSoon";
+import { Footer } from "./Footer";
 import { PODIUM_SLUG } from "@/lib/bundle";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -222,10 +223,7 @@ export function Landing({ products }: { products: Product[] }) {
         </div>
       </section>
 
-      <footer className="flex flex-col justify-between gap-4 border-t border-white/10 px-5 py-10 text-sm text-white/40 md:flex-row md:px-12">
-        <span className="font-display text-lg tracking-wide text-white/70">F1 COLLECTIBLES</span>
-        <span>© F1 Collectibles</span>
-      </footer>
+      <Footer />
     </div>
   );
 }
