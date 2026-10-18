@@ -366,6 +366,13 @@ html.lenis, html.lenis body { height: auto; }
 }
 .cs-visor { opacity: 0; filter: drop-shadow(0 0 5px rgba(255, 214, 150, 0.95)) drop-shadow(0 0 18px rgba(255, 140, 30, 0.75)); }
 .cs-scene[data-on] .cs-visor { animation: visor-ignite 0.7s 0.15s both; }
+/* The same lit display in the full grid, switched by hovering or tapping it. */
+.car-display { cursor: pointer; outline: none; -webkit-touch-callout: none; touch-action: manipulation; }
+.car-display:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 12px; }
+.car-display img { pointer-events: none; }
+.car-display[data-on] .cs-kerb { opacity: 1; animation: cs-strip 0.9s 0.1s both; }
+.car-display[data-on] .cs-btn-light { opacity: 1; animation: visor-ignite 0.6s 0.2s both; }
+.car-display[data-on] .cs-visor { animation: visor-ignite 0.7s both; }
 
 /* The start/stop button: a round hit area over the photo's button, with a pulse and a tag inviting a press. */
 .cs-start {
@@ -426,6 +433,7 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .cs-scene-car, .cs-helmet, .cs-front, .cs-cap-4 { visibility: visible; opacity: 1; }
   .cs-scene[data-on] .cs-kerb, .cs-scene[data-on] .cs-btn-light, .cs-scene[data-on] .cs-visor { animation: none; opacity: 1; }
+  .car-display[data-on] .cs-kerb, .car-display[data-on] .cs-btn-light, .car-display[data-on] .cs-visor { animation: none; opacity: 1; }
   .cs-start::before, .cs-start::after, .cs-start-tag { animation: none; }
 }
 

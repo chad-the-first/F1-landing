@@ -14,6 +14,8 @@ import { Podium } from "./Podium";
 import { CarShowcase } from "./CarShowcase";
 import { CarsSoon, HelmetsSoon } from "./ComingSoon";
 import { Footer } from "./Footer";
+import { PodiumBase } from "./PodiumBase";
+import { CarDisplay } from "./CarDisplay";
 import { PODIUM_SLUG } from "@/lib/bundle";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -198,9 +200,12 @@ export function Landing({ products }: { products: Product[] }) {
                     <FigureStack item={driver} sizes="(max-width: 640px) 80vw, 25vw" className="h-full" />
                   </div>
                 ) : p.slug === PODIUM_SLUG ? (
-                  <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_60%,color-mix(in_srgb,var(--accent-2)_25%,transparent),transparent_70%)] p-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p.image} alt="" className="w-full transition duration-700 group-hover:scale-105" />
+                  <div className="relative flex aspect-[3/4] items-center justify-center bg-[radial-gradient(ellipse_at_50%_60%,color-mix(in_srgb,var(--accent-2)_25%,transparent),transparent_70%)] p-6">
+                    <PodiumBase className="relative aspect-[1800/372] w-[72%]" sizes="(max-width: 640px) 80vw, 25vw" />
+                  </div>
+                ) : p.slug === car.slug ? (
+                  <div className="relative flex aspect-[3/4] items-center justify-center bg-[radial-gradient(ellipse_at_50%_60%,rgba(255,128,0,0.22),transparent_70%)] p-3">
+                    <CarDisplay className="w-full" sizes="(max-width: 640px) 90vw, 25vw" />
                   </div>
                 ) : (
                   <div className="relative aspect-[3/4] overflow-hidden bg-neutral-800">

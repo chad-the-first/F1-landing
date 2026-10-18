@@ -65,11 +65,11 @@ const STREAKS = [
 // - the same photo with the helmet taken out (only the cockpit behind it is filled in, from the no-helmet photo);
 // - your helmet photo, scaled onto the helmet in that photo, which drops into the cockpit.
 const SCENE = { width: 76.855 };
-const HELMET = { left: 32.647, top: 6.182, width: 22.294, height: 42.182 };
+export const HELMET = { left: 32.647, top: 6.182, width: 22.294, height: 42.182 };
 // The halo and the cockpit rim from the same photo, layered over the helmet so it slides in behind them.
-const FRONT = { left: 34.294, top: 37.818, width: 21, height: 11.545 };
-const VISOR = { left: 36.706, top: 26.273, width: 18.176, height: 8.091 };
-const BUTTON = { left: 80, top: 56.364, width: 16.471, height: 25.455, cx: 88.059, cy: 69.091, r: 6.941 };
+export const FRONT = { left: 34.294, top: 37.818, width: 21, height: 11.545 };
+export const VISOR = { left: 36.706, top: 26.273, width: 18.176, height: 8.091 };
+export const BUTTON = { left: 80, top: 56.364, width: 16.471, height: 25.455, cx: 88.059, cy: 69.091, r: 6.941 };
 // The three-quarter car's pose (about the stage centre) whose outline best covers the car on the base.
 const LAND = { scale: 0.6935, rotate: 1.69, xPercent: -1.73, yPercent: -8.37 };
 // How far above the base the car hovers before it drops, in % of the stage height.
@@ -367,7 +367,7 @@ export function CarShowcase({ product }: { product?: Product }) {
   );
 }
 
-const box = (b: { left: number; top: number; width: number; height: number }) => ({
+export const box = (b: { left: number; top: number; width: number; height: number }) => ({
   left: `${b.left}%`,
   top: `${b.top}%`,
   width: `${b.width}%`,

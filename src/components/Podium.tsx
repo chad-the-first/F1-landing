@@ -11,16 +11,9 @@ import { PODIUM_SLUG } from "@/lib/bundle";
 import { confetti } from "@/lib/confetti";
 import { TEAM_IDS } from "@/lib/team";
 import { formatMoney, Product } from "@/lib/woo";
-import { useLightSwitch } from "@/lib/useLightSwitch";
 import { useCart } from "./CartProvider";
 import { FigureStack } from "./FigureStack";
-import podiumP1 from "../../public/images/podium-p1.webp";
-import podiumP2 from "../../public/images/podium-p2.webp";
-import podiumP3 from "../../public/images/podium-p3.webp";
-import tagP1 from "../../public/images/podium-tag-p1.webp";
-import tagP2 from "../../public/images/podium-tag-p2.webp";
-import tagP3 from "../../public/images/podium-tag-p3.webp";
-import tagF1 from "../../public/images/podium-tag-f1.webp";
+import { PodiumBase } from "./PodiumBase";
 import norrisThumb from "../../public/images/norris-helmet-thumb.webp";
 import hamiltonThumb from "../../public/images/hamilton-helmet-thumb.webp";
 import verstappenThumb from "../../public/images/verstappen-helmet-thumb.webp";
@@ -37,14 +30,6 @@ const SLOTS = [
   { label: "P1", left: 35.75, top: 4.05, x: 50.1, y: 76.2 },
   { label: "P2", left: 2.9, top: 9.92, x: 17.25, y: 82.3 },
   { label: "P3", left: 68.63, top: 10.26, x: 82.98, y: 82.7 },
-];
-// Lit copies of the position tags and F1 plaque, placed in % of the podium image. They switch on in
-// podium order, with the plaque last.
-const TAGS = [
-  { id: "p1", src: tagP1, left: 47.587, top: 53.68, width: 4.915, height: 12.771, delay: 0.05 },
-  { id: "p2", src: tagP2, left: 14.075, top: 71.861, width: 4.96, height: 12.554, delay: 0.2 },
-  { id: "p3", src: tagP3, left: 81.055, top: 76.19, width: 5.049, height: 12.771, delay: 0.35 },
-  { id: "f1", src: tagF1, left: 43.655, top: 70.13, width: 13.003, height: 21.861, delay: 0.55 },
 ];
 // Where the steps meet, as a fraction of the stage width, for working out which step a drop lands on.
 const slotAt = (fx: number) => (fx < 0.335 ? 1 : fx < 0.666 ? 0 : 2);
@@ -74,7 +59,6 @@ export function Podium({ products }: { products: Product[] }) {
   const stage = useRef<HTMLDivElement>(null);
   const cta = useRef<HTMLButtonElement>(null);
   const { addItems, busy, setOpen } = useCart();
-  const podiumLight = useLightSwitch();
 
   const [slots, setSlots] = useState<Slot[]>([
     { uid: "init-0", driver: 0 },
@@ -353,59 +337,7 @@ export function Podium({ products }: { products: Product[] }) {
                 ))}
 
                 <div className="pd-floor" aria-hidden />
-                <div
-                  className="pd-podium absolute inset-x-0 bottom-0"
-                  style={{ top: "68.83%" }}
-                  role="button"
-                  tabIndex={0}
-                  aria-pressed={podiumLight.toggled}
-                  aria-label="Podium: switch the lights on"
-                  data-on={podiumLight.on || undefined}
-                  onPointerEnter={(e) => e.pointerType === "mouse" && podiumLight.setHovered(true)}
-                  onPointerLeave={(e) => e.pointerType === "mouse" && podiumLight.setHovered(false)}
-                  onPointerDown={podiumLight.onPointerDown}
-                  onPointerUp={podiumLight.onPointerUp}
-                  onPointerCancel={podiumLight.onPointerCancel}
-                  onContextMenu={(e) => e.preventDefault()}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      podiumLight.setToggled((t) => !t);
-                    }
-                  }}
-                >
-                  {/* Yellow light from strips on the podium's hidden sides; the steps cover the source. */}
-                  <div className="pd-side pd-side-l" aria-hidden>
-                    <div className="pd-sheet" />
-                  </div>
-                  <div className="pd-side pd-side-r" aria-hidden>
-                    <div className="pd-sheet" />
-                  </div>
-                  <div className="absolute inset-0 overflow-hidden">
-                  <Image src={podiumP2} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" draggable={false} className="pd-step-2 object-contain" />
-                  <Image src={podiumP3} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" draggable={false} className="pd-step-3 object-contain" />
-                  <Image
-                    src={podiumP1}
-                    alt="Three-step carbon-weave podium"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                    draggable={false}
-                    className="pd-step-1 object-contain"
-                  />
-                  </div>
-                  {/* The 1, 2, 3 tags and the F1 plaque light up cold white. */}
-                  {TAGS.map((t) => (
-                    <div
-                      key={t.id}
-                      className="pd-tag"
-                      style={{ left: `${t.left}%`, top: `${t.top}%`, width: `${t.width}%`, height: `${t.height}%`, "--d": `${t.delay}s` } as React.CSSProperties}
-                      aria-hidden
-                    >
-                      <div className="pd-tag-spill" />
-                      <Image src={t.src} alt="" fill sizes="10vw" draggable={false} className="pd-tag-img" />
-                    </div>
-                  ))}
-                </div>
+                <PodiumBase className="absolute inset-x-0 bottom-0" style={{ top: "68.83%" }} sizes="(max-width: 1024px) 100vw, 60vw" />
 
                 {/* Glow on a step while a figure is dragged over it, or offered for a swap. */}
                 {SLOTS.map((s, i) => (
