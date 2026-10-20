@@ -22,6 +22,8 @@ add_action( 'template_redirect', function () {
 			foreach ( $data as $key => $value ) {
 				WC()->session->set( $key, maybe_unserialize( $value ) );
 			}
+			// Remember which landing-page cart this came from, so it can be emptied once the order is placed.
+			WC()->session->set( 'f1_cart_source', $payload['user_id'] );
 			WC()->session->set_customer_session_cookie( true );
 			WC()->cart->get_cart_from_session();
 		}
@@ -29,4 +31,17 @@ add_action( 'template_redirect', function () {
 
 	wp_safe_redirect( wc_get_checkout_url() );
 	exit;
+} );
+
+// After a successful order, empty the landing page's cart too, so shoppers who go back don't see
+// what they just bought still sitting in it.
+add_action( 'woocommerce_thankyou', function () {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+	$source = WC()->session->get( 'f1_cart_source' );
+	if ( $source ) {
+		WC()->session->delete_session( $source );
+		WC()->session->set( 'f1_cart_source', null );
+	}
 } );

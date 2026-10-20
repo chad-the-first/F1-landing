@@ -19,13 +19,43 @@ npm install
 npm run dev
 ```
 
-## WordPress side
+## Connecting the store
 
-Copy both files in `wordpress/` to `wp-content/mu-plugins/` on your WordPress site. Test them on a staging site first.
+How the cart reaches checkout: the browser only ever talks to this site. `/api/cart/*` forwards each
+cart change to the WooCommerce Store API from the server and keeps the cart's token in an httpOnly
+cookie on this site. **Checkout** sends the shopper to `WOO_URL/?f1_cart_token=…`, where the
+`f1-cart-handoff.php` plugin loads that cart into their WooCommerce session and shows WooCommerce's
+own checkout. Because the browser never calls WordPress directly, no CORS settings or shared cookies
+are needed, and the two sites can live on different domains or subdomains.
 
-- `f1-cart-handoff.php` loads the landing page's cart into WooCommerce before showing checkout.
-- `f1-podium-bundle.php` takes the podium's price off once for every three driver figures in the cart. It needs a product with the slug `podium-display`, and the figure slugs listed at the top of the file.
+1. **WordPress:** WooCommerce up to date (9.x or later), HTTPS on, and Settings → Permalinks set to
+   anything except "Plain" (the Store API lives at `/wp-json/`). Turn off WooCommerce's "Coming soon"
+   mode once you're ready to sell. If a security plugin or firewall blocks `/wp-json/wc/store/`, allow it.
+2. **Plugins:** copy both files in `wordpress/` to `wp-content/mu-plugins/` (create the folder if needed).
+   Must-use plugins run automatically; they show under Plugins → Must-Use.
+   - `f1-cart-handoff.php` loads the landing page's cart into WooCommerce before showing checkout, and
+     empties the landing page's cart once an order is placed.
+   - `f1-podium-bundle.php` takes the podium's price off once for every three driver figures in the cart.
+3. **Products:** each featured product is matched by its WooCommerce **slug** (the product's URL name),
+   not its ID. IDs and prices come from the store automatically. The products must be published, have a
+   price, and be in stock. Slugs used by the page:
+   - `lando-norris-figure`, `lewis-hamilton-figure`, `max-verstappen-figure` (`src/lib/showcase.ts`, `src/lib/bundle.ts`)
+   - `mcl40-desk-display` (`src/lib/showcase.ts`)
+   - `podium-display` (`src/lib/bundle.ts`, and the top of `wordpress/f1-podium-bundle.php`)
+   To use other slugs, change them in those files. "The full grid" lists the first 24 published products.
+4. **Vercel:** Project → Settings → Environment Variables → add `WOO_URL` = your WordPress address exactly
+   as in WordPress Settings → General → Site Address, with `https://` and no trailing slash. Then redeploy
+   (environment changes only apply to new deployments). The store must be reachable while Vercel builds,
+   since products are read at build time and then refreshed every 15 minutes.
+5. **Domains:** add the landing page's domain or subdomain in Vercel → Settings → Domains and create the
+   DNS record Vercel shows at your registrar. WordPress keeps its own address; `WOO_URL` points at it.
+6. **Test:** on the live page, add a figure, open the cart and press Checkout. WooCommerce's checkout should
+   show the same items and total (with the podium free when three figures and a podium are in the cart).
+   Place a test order (e.g. with "Cash on delivery" or your payment plugin's test mode), then go back to the
+   landing page: the cart should be empty.
+   - Checkout opens empty: WooCommerce is too old for the handoff, or the plugin isn't in `mu-plugins`.
+   - A product's button says "Coming soon" instead of Add to cart: its slug doesn't match, or it isn't published.
 
 ## Deploy
 
-Push to GitHub and import the repo in Vercel. Add `WOO_URL` as an environment variable.
+Push to GitHub and import the repo in Vercel. Add `WOO_URL` as an environment variable (see above).
