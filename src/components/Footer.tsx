@@ -1,7 +1,7 @@
 "use client";
 
 import type { AnchorHTMLAttributes, ReactNode } from "react";
-import { HELP_LINKS, SOCIALS, type SocialId } from "@/lib/site";
+import { HELP_LINKS, SOCIALS, socialHref, type SocialId } from "@/lib/site";
 
 const ICONS: Record<SocialId, ReactNode> = {
   instagram: (
@@ -46,7 +46,7 @@ const TRUST = [
   {
     title: "Also on Etsy",
     text: "See our Etsy shop and what buyers there say about us.",
-    link: { label: "Visit our Etsy shop", href: SOCIALS[3].href },
+    link: { label: "Visit our Etsy shop", href: socialHref("etsy") },
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
         <path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" />
@@ -56,7 +56,7 @@ const TRUST = [
   {
     title: "Real people, real answers",
     text: "Questions before you order? Send us a message and we'll get back to you.",
-    link: { label: "Message us on Instagram", href: SOCIALS[0].href },
+    link: { label: "Message us on Instagram", href: socialHref("instagram") },
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
         <path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z" />
@@ -115,11 +115,11 @@ export function Footer() {
           <div>
             <h3 className="text-xs uppercase tracking-[0.35em] text-white/45">Follow the grid</h3>
             <ul className="mt-5 grid grid-cols-2 gap-3">
-              {SOCIALS.map((s) => (
-                <li key={s.id}>
+              {SOCIALS.filter((s) => s.href !== "#").map((s, i, shown) => (
+                <li key={s.id} className={shown.length % 2 && i === shown.length - 1 ? "col-span-2" : undefined}>
                   <Out
                     href={s.href}
-                    aria-label={`F1 Collectibles on ${s.name}`}
+                    aria-label={`${s.line} on ${s.name}`}
                     className="ft-social group flex items-center gap-3 rounded-2xl bg-white/[0.04] p-3 ring-1 ring-white/10 md:p-4"
                   >
                     <span className="ft-social-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 [&>svg]:h-5 [&>svg]:w-5">
