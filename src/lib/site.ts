@@ -16,6 +16,6 @@ export const socialHref = (id: SocialId) => SOCIALS.find((s) => s.id === id)!.hr
 export const HELP_LINKS: { name: string; href: string; policy?: PolicyId }[] = [
   { name: "Shipping", href: "#", policy: "shipping" },
   { name: "Returns & refunds", href: "#", policy: "returns" },
-  { name: "Contact us", href: "#" },
+  { name: "Contact us", href: "https://3dminime.shop/about-us/#contact" }, // #contact: CSS ID on the form section in Elementor
   { name: "Privacy policy", href: "#", policy: "privacy" },
 ];
