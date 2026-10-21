@@ -1,5 +1,7 @@
 import "server-only";
 import { formatMoney, mapProduct, Product } from "./woo";
+import { car, drivers } from "./showcase";
+import { PODIUM_SLUG } from "./bundle";
 
 // Shown when WOO_URL is not set, so the page can be designed before the store is connected.
 // Prices are placeholders; real prices come from WooCommerce.
@@ -16,11 +18,17 @@ export const demoProducts: Product[] = [
   demo(5, "Podium Display", "podium-display", 4900, "/images/podium.webp", "Three-step real carbon fiber podium for your figures. Free with any three figures."),
 ];
 
+// Only the products this page features are shown, in this order; the rest of the store's catalogue is left out.
+const PAGE_SLUGS = [...drivers.map((d) => d.slug), car.slug, PODIUM_SLUG];
+
 export async function getProducts(): Promise<Product[]> {
   "use cache";
   const base = process.env.WOO_URL;
   if (!base) return demoProducts;
-  const res = await fetch(`${base}/wp-json/wc/store/v1/products?per_page=24`);
+  const res = await fetch(`${base}/wp-json/wc/store/v1/products?slug=${PAGE_SLUGS.join(",")}&per_page=100`);
   if (!res.ok) throw new Error(`WooCommerce products request failed: ${res.status}`);
-  return (await res.json()).map(mapProduct);
+  // Filtered here too, in case an older store ignores the slug filter and returns everything.
+  const products: Product[] = (await res.json()).map(mapProduct);
+  const bySlug = new Map(products.map((p) => [p.slug, p]));
+  return PAGE_SLUGS.flatMap((slug) => bySlug.get(slug) ?? []);
 }

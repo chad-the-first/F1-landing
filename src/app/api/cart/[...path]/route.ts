@@ -32,10 +32,18 @@ async function proxy(req: NextRequest, { params }: { params: Promise<{ path: str
     cache: "no-store",
   });
 
-  const res = new NextResponse(upstream.body, {
-    status: upstream.status,
-    headers: { "Content-Type": "application/json" },
-  });
+  // WordPress sometimes answers with a plain-text or HTML error page (a PHP error, a firewall, a
+  // maintenance page). Pass its first line on as a JSON error so the cart can show what went wrong.
+  const text = await upstream.text();
+  let res: NextResponse;
+  try {
+    JSON.parse(text);
+    res = new NextResponse(text, { status: upstream.status, headers: { "Content-Type": "application/json" } });
+  } catch {
+    const detail = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
+    console.error(`WooCommerce ${path} returned ${upstream.status} without JSON: ${detail}`);
+    res = NextResponse.json({ error: `The store returned an error instead of the cart: ${detail || `HTTP ${upstream.status}`}` }, { status: 502 });
+  }
   const newToken = upstream.headers.get("Cart-Token");
   if (newToken && newToken !== token) {
     res.cookies.set(TOKEN_COOKIE, newToken, {
