@@ -1,7 +1,8 @@
 "use client";
 
-import type { AnchorHTMLAttributes, ReactNode } from "react";
+import { useState, type AnchorHTMLAttributes, type ReactNode } from "react";
 import { HELP_LINKS, SOCIALS, socialHref, type SocialId } from "@/lib/site";
+import { PolicyModal, type PolicyId } from "./PolicyModal";
 
 const ICONS: Record<SocialId, ReactNode> = {
   instagram: (
@@ -81,6 +82,8 @@ function Out({ href, children, ...rest }: AnchorHTMLAttributes<HTMLAnchorElement
 }
 
 export function Footer() {
+  const [policy, setPolicy] = useState<PolicyId | null>(null);
+
   return (
     <footer className="site-footer relative overflow-hidden border-t border-white/10">
       <div className="ft-checker" aria-hidden />
@@ -140,9 +143,15 @@ export function Footer() {
             <ul className="mt-5 space-y-3">
               {HELP_LINKS.map((l) => (
                 <li key={l.name}>
-                  <Out href={l.href} className="ft-link text-white/70 hover:text-white">
-                    {l.name}
-                  </Out>
+                  {l.policy ? (
+                    <button type="button" onClick={() => setPolicy(l.policy!)} className="ft-link text-white/70 hover:text-white">
+                      {l.name}
+                    </button>
+                  ) : (
+                    <Out href={l.href} className="ft-link text-white/70 hover:text-white">
+                      {l.name}
+                    </Out>
+                  )}
                 </li>
               ))}
             </ul>
@@ -171,6 +180,8 @@ export function Footer() {
           </button>
         </div>
       </div>
+
+      <PolicyModal open={policy} onSelect={setPolicy} />
     </footer>
   );
 }
