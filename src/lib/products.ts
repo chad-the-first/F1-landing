@@ -25,10 +25,18 @@ export async function getProducts(): Promise<Product[]> {
   "use cache";
   const base = process.env.WOO_URL;
   if (!base) return demoProducts;
-  const res = await fetch(`${base}/wp-json/wc/store/v1/products?slug=${PAGE_SLUGS.join(",")}&per_page=100`);
-  if (!res.ok) throw new Error(`WooCommerce products request failed: ${res.status}`);
-  // Filtered here too, in case an older store ignores the slug filter and returns everything.
-  const products: Product[] = (await res.json()).map(mapProduct);
-  const bySlug = new Map(products.map((p) => [p.slug, p]));
-  return PAGE_SLUGS.flatMap((slug) => bySlug.get(slug) ?? []);
+  // If the store is down or answers with an error page, show the page without products (their buttons
+  // read "Coming soon") rather than failing the deploy; the cached result is retried after 15 minutes.
+  try {
+    const res = await fetch(`${base}/wp-json/wc/store/v1/products?slug=${PAGE_SLUGS.join(",")}&per_page=100`);
+    const text = await res.text();
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${text.slice(0, 300)}`);
+    // Filtered here too, in case an older store ignores the slug filter and returns everything.
+    const products: Product[] = JSON.parse(text).map(mapProduct);
+    const bySlug = new Map(products.map((p) => [p.slug, p]));
+    return PAGE_SLUGS.flatMap((slug) => bySlug.get(slug) ?? []);
+  } catch (e) {
+    console.error("WooCommerce products request failed:", e instanceof Error ? e.message : e);
+    return [];
+  }
 }
