@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Anton, Geist } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { CartProvider } from "@/components/CartProvider";
 import { CartDrawer } from "@/components/CartDrawer";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
           <CartDrawer />
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );
