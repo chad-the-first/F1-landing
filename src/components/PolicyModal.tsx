@@ -27,8 +27,9 @@ const POLICIES: Record<PolicyId, Policy> = {
   shipping: {
     title: "Shipping",
     short: "Shipping",
-    intro: "Every order is packed with care and sent with DHL, so your figures and displays reach you quickly and safely.",
+    intro: "We ship worldwide. Every order is packed with care and sent with DHL, so your figures and displays reach you quickly and safely, wherever you are.",
     highlights: [
+      { label: "Ships to", value: "Worldwide", text: "We deliver internationally, so you can order from anywhere in the world." },
       { label: "Carrier", value: "DHL only", text: "We ship every order with DHL for fast, reliable and secure delivery." },
       { label: "Delivery time", value: "About 2 weeks", text: "Most orders arrive around two weeks after they're placed." },
     ],
@@ -269,7 +270,7 @@ export function PolicyModal({ open, onSelect }: { open: PolicyId | null; onSelec
               {p.highlights && (
                 <ul className="mt-6 grid gap-3 sm:grid-cols-2">
                   {p.highlights.map((h) => (
-                    <li key={h.label} className="rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10">
+                    <li key={h.label} className="rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10 sm:first:col-span-2">
                       <p className="text-xs uppercase tracking-[0.3em] text-white/45">{h.label}</p>
                       <p className="mt-2 font-display text-2xl uppercase tracking-wide text-accent">{h.value}</p>
                       <p className="mt-1 text-sm text-white/55">{h.text}</p>
