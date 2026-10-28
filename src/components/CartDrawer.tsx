@@ -4,6 +4,13 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import { useCart } from "./CartProvider";
 
+export const GlobeIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
+  </svg>
+);
+
 export function CartButton() {
   const { cart, setOpen } = useCart();
   return (
@@ -103,6 +110,10 @@ export function CartDrawer() {
               >
                 Checkout
               </a>
+              <p className="mt-3 flex items-center justify-center gap-2 text-xs uppercase tracking-[0.25em] text-white/50">
+                <GlobeIcon className="h-3.5 w-3.5 text-accent" />
+                We ship worldwide with DHL
+              </p>
             </footer>
           </motion.aside>
         </>

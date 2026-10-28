@@ -189,7 +189,9 @@ export function Landing({ products }: { products: Product[] }) {
       <section id="shop" className="px-5 py-32 md:px-12">
         <div className="mb-14 flex items-end justify-between gap-6">
           <h2 className="font-display text-6xl uppercase leading-none md:text-8xl">The full grid</h2>
-          <span className="hidden text-sm text-white/50 md:block">{products.length} pieces</span>
+          <span className="text-right text-sm text-white/50">
+            <span className="hidden md:inline">{products.length} pieces · </span>Ships worldwide
+          </span>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((p) => (

@@ -70,6 +70,18 @@ const FEATURES = [
       </svg>
     ),
   },
+  {
+    k: "Ships worldwide",
+    t: "Wherever you race from, we deliver.",
+    d: "We ship internationally with DHL, so you can order from anywhere in the world. Most orders arrive in about two weeks.",
+    full: true,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
+      </svg>
+    ),
+  },
 ];
 
 // The reasons the pieces earn their spot on a desk, rising in as the section scrolls into view.
@@ -107,7 +119,7 @@ export function Features() {
           {FEATURES.map((f) => (
             <li
               key={f.k}
-              className={`feat-card group relative overflow-hidden rounded-3xl bg-white/[0.04] p-7 ring-1 ring-white/10 ${f.wide ? "sm:col-span-2 md:flex md:items-center md:gap-10" : ""}`}
+              className={`feat-card group relative overflow-hidden rounded-3xl bg-white/[0.04] p-7 ring-1 ring-white/10 ${f.wide ? "sm:col-span-2 md:flex md:items-center md:gap-10" : ""} ${f.full ? "sm:col-span-full md:flex md:items-center md:gap-10" : ""}`}
             >
               <span className="feat-glow" aria-hidden />
               <div className="relative md:flex-1">
@@ -118,6 +130,16 @@ export function Features() {
                 <h3 className="mt-2 text-2xl font-semibold leading-tight">{f.t}</h3>
                 <p className="mt-3 text-white/60">{f.d}</p>
               </div>
+              {/* Quick shipping facts, so the promise reads at a glance. */}
+              {f.full && (
+                <ul className="relative mt-8 flex flex-wrap gap-2 text-xs uppercase tracking-widest text-white/80 md:mt-0 md:shrink-0">
+                  {["Worldwide", "DHL", "About 2 weeks"].map((c) => (
+                    <li key={c} className="rounded-full border border-white/20 px-3 py-2">
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              )}
               {/* The three helmets taking turns in the spotlight, to show they're interchangeable. */}
               {f.wide && (
                 <div className="feat-swap relative mt-8 flex shrink-0 items-end justify-center gap-3 md:mt-0" aria-hidden>
